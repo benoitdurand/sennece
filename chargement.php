@@ -3,32 +3,52 @@ include 'includes.php';
 
 $table     = T_PALETTE;
 $DB->table = $table;
-
-$jour = date('w');
+$jour      = date('w');
 
 if (isset($_GET['value'])) {
 	$compteur  = $DB->getAndUpdateCompteur();
 	$site = intval ($_GET['value']);
-	$tournee = texte::right("0000".$compteur,5)."-";
+	$tournee = str_pad($compteur,5,"0",STR_PAD_LEFT)."-";
+	
 	if ($site == 0) {
+		// Salon vers GRANS
 		$tournee .= (string) 1000 * $jour + 100;
-	} else
-	{
+	} else {
+		// Grans vers SALON
 		$tournee .= (string) 1000 * $jour + 800;
 	}
 	$_SESSION['tournee']= $tournee;
+
+	$table                  = T_TOURNEE;
+	$DB->table              = $table;
+	$numTournee             = $DB->insertIntoDB(array('numtournee'=>$tournee));
+	$_SESSION['numTournee'] = $numTournee;
+	
 }
 
-if (isset($_GET['tournee'])) {
-	$tournee = $_GET['tournee'];
-	}
-
 if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
-	$codemag = $_POST['codemag'];
-	$ean     = str_pad($_POST['ean'],5,'0',STR_PAD_LEFT);
-	$now     = strftime("%F %T");
-	$data    = array('codemag'=>$codemag, 'ean'=>$ean, 'dateheure_exp'=>$now);       
-	$nb      = $DB->insertIntoDB($data);
+	$table     = T_PALETTE;
+	$DB->table = $table;
+	$codemag   = $_POST['codemag'];
+	$ean       = $_POST['ean'];
+	// $now     = strftime("%F %T");
+	
+	// Si ean et numero de tournée existent déjà, mettre à jour la ligne
+	$listes = $DB->tquery("SELECT id FROM ".T_PALETTE." WHERE ean={$ean} AND id_tournee={$_SESSION['numTournee']}");
+	// ean & numTournée déja existants -> mettre à jour code client et la date
+	if (!empty($listes)) {
+		$id  = $listes[0]['id'];
+		$now = strftime("%F %T");
+		$nb  = $DB->updateDB(array('codemag' => $codemag, 'dateheure_exp'=>$now), $id);
+	} else {
+		// Si ean, numéro de tournéee et code magasin existent on ne fait rien sinon nouvel enregistrement.
+		$listes = $DB->tquery("SELECT id FROM ".T_PALETTE." WHERE ean={$ean} AND id_tournee={$_SESSION['numTournee']} AND codemag={$codemag}");
+		// Non existant -> Enregistrement
+		if (empty($listes)){
+			$data    = array('codemag'=>$codemag, 'ean'=>$ean, 'receive'=>0, 'id_tournee'=>$_SESSION['numTournee']);       
+			$nb      = $DB->insertIntoDB($data);
+		}
+	}
 }
 ?>
 
@@ -43,12 +63,13 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 	    <form method="POST" action="chargement.php" name="chargement">
 	     	
 	     	Code client : </br>
-	     	<input type="text" name="codemag" id="codemag" onkeydown="if(event.keyCode==13) event.keyCode=9;"></br>
+	     	<input type="text" name="codemag" id="codemag" maxlength="5" onkeydown="if(event.keyCode==13) event.keyCode=9;"></br>
 
 			EAN : </br>
-	     	<input type="text" name="ean" id="ean"></br>
+	     	<input type="text" name="ean" id="ean" maxlength="45"></br>
 
 	     	<input type="submit" value="Valider">
+	     	<button type="button" onclick="location.href='index.php'">Chargement terminé</button>
 	    </form>
     </body>
 </html>

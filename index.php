@@ -1,18 +1,3 @@
-<?php 
-include 'includes.php'; 
-
-$table     = T_CAMION;
-$DB->table = $table;
-
-if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
-	$codemag = $_POST['codemag'];
-	$ean     = $_POST['ean'];
-	$now     = strftime("%F %T");
-	$data    = array('codemag'=>$codemag, 'ean'=>$ean, 'dateheure'=>$now);       
-	$nb      = $DB->insertIntoDB($data);
-}
-?>
-
 <!doctype html>
     <head>
         <meta charset="utf-8">

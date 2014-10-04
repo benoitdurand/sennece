@@ -4,9 +4,9 @@ USE `chargement`;
 CREATE TABLE IF NOT EXISTS `palette` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ean` varchar(45) DEFAULT NULL,
-  `codemag` varchar(6) DEFAULT NULL,
+  `codemag` varchar(5) DEFAULT NULL,
   `dateheure_exp` datetime DEFAULT CURRENT_TIMESTAMP,
-  `dateheure_rec` datetime DEFAULT CURRENT_TIMESTAMP,
+  `dateheure_rec` datetime DEFAULT,
   `receive` tinyint(1) unsigned,
   `id_tournee` int(10) unsigned,
   PRIMARY KEY (`id`),
@@ -18,19 +18,19 @@ CREATE TABLE IF NOT EXISTS `client` (
   `libelle` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `compteur` (`compteur` smallint(3) unsigned) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `compteur` (`compteur` smallint(3) unsigned DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `tournee` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-	`numtournee` varchar(45) DEFAULT NULL,
+	`numtournee` varchar(10) DEFAULT NULL,
 	`dateheure_start` datetime DEFAULT CURRENT_TIMESTAMP,
-	`dateheure_end` datetime DEFAULT CURRENT_TIMESTAMP,
+	`dateheure_end` datetime,
 	PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `erreur` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-	`numtournee` varchar(45) DEFAULT NULL,
-	`erreur` datetime DEFAULT CURRENT_TIMESTAMP,
+	`numtournee` varchar(10) DEFAULT NULL,
+	`erreur` varchar(150),
 	PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE palette ADD INDEX (ean);

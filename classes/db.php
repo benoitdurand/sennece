@@ -90,7 +90,8 @@ class Db {
 			$sql = "INSERT INTO {$table} {$strFields} VALUES {$strData}";
 
 			$req = $this->connexion->prepare($sql);
-			return $req->execute($data);
+			$req->execute($data);
+			return $this->connexion->lastInsertId();
 		}
 	}
 
