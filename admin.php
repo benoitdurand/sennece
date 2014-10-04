@@ -1,13 +1,13 @@
 <?php
 include 'includes.php';
 
-$table     = T_CAMION;
+$table     = T_PALETTE;
 $DB->table = $table;
 
 // select c.ean, c.codemag, clt.libelle, dateheure from camion as c JOIN client as clt ON RIGHT('00000'+c.codemag,5) = RIGHT('00000'+clt.codecli,5);
 
 // $listes = $DB->query("SELECT * FROM ".T_CAMION." ORDER BY dateheure DESC");
-	$listes = $DB->query("SELECT c.ean, c.codemag, clt.libelle, dateheure FROM ".T_CAMION." AS c LEFT JOIN ".T_CLIENT." AS clt ON RIGHT('00000'+c.codemag,5) = RIGHT('00000'+clt.codecli,5) ORDER BY dateheure DESC");
+	$listes = $DB->query("SELECT c.ean, c.codemag, clt.libelle, dateheure FROM ".T_PALETTE." AS c LEFT JOIN ".T_CLIENT." AS clt ON RIGHT('00000'+c.codemag,5) = RIGHT('00000'+clt.codecli,5) ORDER BY dateheure DESC");
 
 include 'header.php';
 

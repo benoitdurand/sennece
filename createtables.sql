@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS `chargement`;
 
 USE `chargement`;
-CREATE TABLE IF NOT EXISTS `camion` (
+CREATE TABLE IF NOT EXISTS `palette` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ean` varchar(45) DEFAULT NULL,
   `codemag` varchar(6) DEFAULT NULL,
@@ -23,11 +23,19 @@ CREATE TABLE IF NOT EXISTS `compteur` (`compteur` smallint(3) unsigned) ENGINE=I
 CREATE TABLE IF NOT EXISTS `tournee` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`numtournee` varchar(45) DEFAULT NULL,
+	`dateheure_start` datetime DEFAULT CURRENT_TIMESTAMP,
+	`dateheure_end` datetime DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE INDEX ean_palette ON camion (ean(20));
-CREATE INDEX code_client ON client (codecli(6));
+CREATE TABLE IF NOT EXISTS `erreur` (
+	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+	`numtournee` varchar(45) DEFAULT NULL,
+	`erreur` datetime DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE palette ADD INDEX (ean);
+ALTER TABLE palette ADD INDEX (codemag);
+ALTER TABLE client ADD INDEX (codecli);
 
 USE `mysql`;
 INSERT INTO `user` (`Host`, `User`, `Password`, `Select_priv`, `Insert_priv`, `Update_priv`, `Delete_priv`, `Create_priv`, `Drop_priv`, `Reload_priv`, `Shutdown_priv`, `Process_priv`, `File_priv`, `Grant_priv`, `References_priv`, `Index_priv`, `Alter_priv`, `Show_db_priv`, `Super_priv`, `Create_tmp_table_priv`, `Lock_tables_priv`, `Execute_priv`, `Repl_slave_priv`, `Repl_client_priv`, `Create_view_priv`, `Show_view_priv`, `Create_routine_priv`, `Alter_routine_priv`, `Create_user_priv`, `Event_priv`, `Trigger_priv`, `Create_tablespace_priv`, `ssl_type`, `ssl_cipher`, `x509_issuer`, `x509_subject`, `max_questions`, `max_updates`, `max_connections`, `max_user_connections`, `plugin`, `authentication_string`) VALUES ('localhost', 'admin_chargement', PASSWORD('R88aV23B7GpD9rnk'), 'Y', 'Y', 'Y', 'Y', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', '', '', '', '', 0, 0, 0, 0, '', NULL);

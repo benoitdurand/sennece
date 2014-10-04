@@ -1,22 +1,27 @@
 <?php 
 include 'includes.php'; 
 
-$table     = T_CAMION;
+$table     = T_PALETTE;
 $DB->table = $table;
-$compteur  = $DB->getAndUpdateCompteur();
+
 $jour = date('w');
 
 if (isset($_GET['value'])) {
+	$compteur  = $DB->getAndUpdateCompteur();
 	$site = intval ($_GET['value']);
+	$tournee = texte::right("0000".$compteur,5)."-";
 	if ($site == 0) {
-		$tournee = (string) 1000 * $jour + 100;
-		$tournee .= "-".$compteur;
+		$tournee .= (string) 1000 * $jour + 100;
 	} else
 	{
-		$tournee = (string) 1000 * $jour + 800;
-		$tournee .= "-".$compteur;
+		$tournee .= (string) 1000 * $jour + 800;
 	}
+	$_SESSION['tournee']= $tournee;
 }
+
+if (isset($_GET['tournee'])) {
+	$tournee = $_GET['tournee'];
+	}
 
 if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 	$codemag = $_POST['codemag'];
@@ -34,7 +39,7 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
         <title>Chargement</title>
     </head>
     <body>
-		<h3>Chargement camion - <?= $tournee ?></h3>
+		<h3>Chargement camion - <?= $_SESSION['tournee'] ?></h3>
 	    <form method="POST" action="chargement.php" name="chargement">
 	     	
 	     	Code client : </br>
