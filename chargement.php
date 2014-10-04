@@ -5,6 +5,7 @@ $table     = T_PALETTE;
 $DB->table = $table;
 $jour      = date('w');
 
+
 if (isset($_GET['value'])) {
 	$compteur  = $DB->getAndUpdateCompteur();
 	$site = intval ($_GET['value']);
@@ -23,7 +24,8 @@ if (isset($_GET['value'])) {
 	$DB->table              = $table;
 	$numTournee             = $DB->insertIntoDB(array('numtournee'=>$tournee));
 	$_SESSION['numTournee'] = $numTournee;
-	
+	$_SESSION['numPalette'] = 0;
+
 }
 
 if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
@@ -32,9 +34,10 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 	$codemag   = $_POST['codemag'];
 	$ean       = $_POST['ean'];
 	// $now     = strftime("%F %T");
-	
+	$_SESSION['numPalette']++;
+
 	// Si ean et numero de tournée existent déjà, mettre à jour la ligne
-	$listes = $DB->tquery("SELECT id FROM ".T_PALETTE." WHERE ean={$ean} AND id_tournee={$_SESSION['numTournee']}");
+	$listes = $DB->tquery("SELECT id FROM ".T_PALETTE." WHERE ean={$ean} AND id_tournee={$_SESSION['numTournee']} AND receive=0");
 	// ean & numTournée déja existants -> mettre à jour code client et la date
 	if (!empty($listes)) {
 		$id  = $listes[0]['id'];
@@ -42,7 +45,7 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 		$nb  = $DB->updateDB(array('codemag' => $codemag, 'dateheure_exp'=>$now), $id);
 	} else {
 		// Si ean, numéro de tournéee et code magasin existent on ne fait rien sinon nouvel enregistrement.
-		$listes = $DB->tquery("SELECT id FROM ".T_PALETTE." WHERE ean={$ean} AND id_tournee={$_SESSION['numTournee']} AND codemag={$codemag}");
+		$listes = $DB->tquery("SELECT id FROM ".T_PALETTE." WHERE ean={$ean} AND id_tournee={$_SESSION['numTournee']} AND codemag={$codemag} AND receive=0");
 		// Non existant -> Enregistrement
 		if (empty($listes)){
 			$data    = array('codemag'=>$codemag, 'ean'=>$ean, 'receive'=>0, 'id_tournee'=>$_SESSION['numTournee']);       
@@ -58,8 +61,9 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
         <meta name="viewport" content="width=device-width">
         <title>Chargement</title>
     </head>
-    <body>
-		<h3>Chargement camion - <?= $_SESSION['tournee'] ?></h3>
+    <body OnLoad="document.chargement.codemag.focus()">
+		<h4>Tournée : <?= $_SESSION['tournee'] ?></h4>
+		
 	    <form method="POST" action="chargement.php" name="chargement">
 	     	
 	     	Code client : </br>
@@ -69,7 +73,15 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 	     	<input type="text" name="ean" id="ean" maxlength="45"></br>
 
 	     	<input type="submit" value="Valider">
-	     	<button type="button" onclick="location.href='index.php'">Chargement terminé</button>
+	     	<button type="button" onclick="location.href='index.php'">Fin chargement</button>
 	    </form>
+	    <?php
+			if ($_SESSION['numPalette'] > 1) {
+				echo "Palettes déja scannées : ".$_SESSION['numPalette']."</br>";
+			} else {
+				echo "Palette déja scannée : ".$_SESSION['numPalette']."</br>";
+			}
+			echo "";
+		 ?>
     </body>
 </html>

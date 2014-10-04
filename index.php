@@ -5,9 +5,9 @@
         <title>Chargement</title>
         <style type="text/css">
 			.bouton{
-				height: 50px;
+				height: 40px;
 				width: 100%;
-				margin-bottom: 20px;
+				margin-bottom: 10px;
 			}
 			h3 {
 				text-align: center;
