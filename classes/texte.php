@@ -27,12 +27,16 @@ class Texte{
 	}
 
 	public static function short_french_date_time($d){
-		
 		$blocs = explode(' ',$d);
 		$date = explode ('-',$blocs[0]);
 		$time= explode(':',$blocs[1]);
 		$french =$date[2].'/'.$date[1].'/'.$date[0].' à '.$time[0].':'.$time[1];
 		return $french;
+	}
+
+	public static function extract_time($d){
+		$blocs = explode(' ',$d);
+		return $blocs[1];
 	}
 
 	public static function generer($nbr){

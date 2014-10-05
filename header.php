@@ -5,14 +5,12 @@
 	<title>Chargement GRANS</title>
             <link rel="stylesheet" href="css/style.css">
             <link rel="stylesheet" href="css/bootstrap.min.css">
-            <link rel="stylesheet" href="css/jquery-ui-theme/jquery-ui.css">
-            <link rel="stylesheet" href="css/theme.blue.css">
+            <link rel="stylesheet" href="css/jquery.dataTables.min.css">
+
 
             <script src="js/jquery.js"></script>
-            <script src="js/jquery-ui.min.js"></script>
-            <script src="js/jquery.tablesorter.min.js"></script>
-            <script src="js/jquery.tablesorter.pager.js"></script>
-            <script src="js/jquery.tablesorter.widgets.min.js"></script>
+            <script src="js/jquery.dataTables.min.js"></script>
+            <script src="js/dataTables.bootstrap.js"></script>
 </head>
 <header>
         	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">

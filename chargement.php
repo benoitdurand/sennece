@@ -9,10 +9,12 @@ if (isset($_GET['value'])) {
 	
 	if ($site == 0) {
 		// Salon vers GRANS
-		$tournee .= (string) 1000 * $jour + 100;
+		$calcul = 1000 * $jour + 100;
+		$tournee .= str_pad($calcul,4,"0",STR_PAD_LEFT);
 	} else {
 		// Grans vers SALON
-		$tournee .= (string) 1000 * $jour + 800;
+		$calcul = 1000 * $jour + 800;
+		$tournee .= str_pad($calcul,4,"0",STR_PAD_LEFT);
 	}
 
 	$_SESSION['tournee']    = $tournee;
@@ -33,7 +35,7 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 	$_SESSION['numPalette']++;
 
 	// Si ean et numero de tournée existent déjà, mettre à jour la ligne
-	$listes = $DB->tquery("SELECT id FROM ".$table." WHERE ean={$ean} AND id_tournee={$_SESSION['numTournee']} AND receive=0");
+	$listes = $DB->tquery("SELECT id FROM ".$table." WHERE ean='{$ean}' AND id_tournee='{$_SESSION['numTournee']}' AND receive=0");
 	// ean & numTournée déja existants -> mettre à jour code client et la date
 	if (!empty($listes)) {
 		$id  = $listes[0]['id'];
@@ -41,7 +43,7 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 		$nb  = $DB->updateDB(array('codemag' => $codemag, 'dateheure_exp'=>$now), $id);
 	} else {
 		// Si ean, numéro de tournéee et code magasin existent on ne fait rien sinon nouvel enregistrement.
-		$listes = $DB->tquery("SELECT id FROM ".$table." WHERE ean={$ean} AND id_tournee={$_SESSION['numTournee']} AND codemag={$codemag} AND receive=0");
+		$listes = $DB->tquery("SELECT id FROM {$table} WHERE ean='{$ean}' AND id_tournee='{$_SESSION['numTournee']}' AND codemag='{$codemag}' AND receive=0");
 		// Non existant -> Enregistrement
 		if (empty($listes)){
 			$data    = array('codemag'=>$codemag, 'ean'=>$ean, 'receive'=>0, 'id_tournee'=>$_SESSION['numTournee']);       
@@ -95,8 +97,8 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 	     xhr.open("POST", "recherche-mag.php", true); 
 	     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");                  
 	     xhr.send(data);
-		 xhr.onreadystatechange = display_data;
-		function display_data() {
+		 xhr.onreadystatechange = afficherMagasin;
+		function afficherMagasin() {
 		 if (xhr.readyState == 4) {
 	      if (xhr.status == 200) {
 		  document.getElementById("libellemag").innerHTML = xhr.responseText;
