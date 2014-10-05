@@ -110,6 +110,40 @@ table{
 
 
 body{
-	background-image: url(../img/fond.gif);
+  overflow-x: hidden!important;
+  font-family: 'Source Sans Pro', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100%;
+  background: #f9f9f9;
 }
 
+body > .header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+}
+/* Define 2 column template */
+.right-side,
+.left-side {
+  min-height: 100%;
+  display: block;
+}
+/*right side - contins main content*/
+.right-side {
+  background-color: #f9f9f9;
+  margin-left: 220px;
+}
+/*left side - contains sidebar*/
+.left-side {
+  position: absolute;
+  width: 220px;
+  top: 0;
+}
+
+/* Change the color of the striped tables */
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+  background-color: #f3f4f5;
+}

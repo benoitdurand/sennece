@@ -6,9 +6,9 @@ CREATE TABLE IF NOT EXISTS `palette` (
   `ean` varchar(45) DEFAULT NULL,
   `codemag` varchar(5) DEFAULT NULL,
   `dateheure_exp` datetime DEFAULT CURRENT_TIMESTAMP,
-  `dateheure_rec` datetime DEFAULT,
-  `receive` tinyint(1) unsigned,
-  `id_tournee` int(10) unsigned,
+  `dateheure_rec` datetime DEFAULT NULL,
+  `receive` tinyint(1) unsigned DEFAULT NULL,
+  `id_tournee` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_camion_tournee_idx` (`id_tournee`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -19,19 +19,21 @@ CREATE TABLE IF NOT EXISTS `client` (
   PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `compteur` (`compteur` smallint(3) unsigned DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO compteur (compteur) VALUE (0);
+
 
 CREATE TABLE IF NOT EXISTS `tournee` (
-	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-	`numtournee` varchar(10) DEFAULT NULL,
-	`dateheure_start` datetime DEFAULT CURRENT_TIMESTAMP,
-	`dateheure_end` datetime,
-	PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `numtournee` varchar(10) DEFAULT NULL,
+  `dateheure_start` datetime DEFAULT CURRENT_TIMESTAMP,
+  `dateheure_end` datetime,
+  PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `erreur` (
-	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-	`numtournee` varchar(10) DEFAULT NULL,
-	`erreur` varchar(150),
-	PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `numtournee` varchar(10) DEFAULT NULL,
+  `erreur` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE palette ADD INDEX (ean);
 ALTER TABLE palette ADD INDEX (codemag);
