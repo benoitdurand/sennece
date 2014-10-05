@@ -33,7 +33,7 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 	$_SESSION['numPalette']++;
 
 	// Si ean et numero de tournée existent déjà, mettre à jour la ligne
-	$listes = $DB->tquery("SELECT id FROM ".T_PALETTE." WHERE ean={$ean} AND id_tournee={$_SESSION['numTournee']} AND receive=0");
+	$listes = $DB->tquery("SELECT id FROM ".$table." WHERE ean={$ean} AND id_tournee={$_SESSION['numTournee']} AND receive=0");
 	// ean & numTournée déja existants -> mettre à jour code client et la date
 	if (!empty($listes)) {
 		$id  = $listes[0]['id'];
@@ -41,7 +41,7 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 		$nb  = $DB->updateDB(array('codemag' => $codemag, 'dateheure_exp'=>$now), $id);
 	} else {
 		// Si ean, numéro de tournéee et code magasin existent on ne fait rien sinon nouvel enregistrement.
-		$listes = $DB->tquery("SELECT id FROM ".T_PALETTE." WHERE ean={$ean} AND id_tournee={$_SESSION['numTournee']} AND codemag={$codemag} AND receive=0");
+		$listes = $DB->tquery("SELECT id FROM ".$table." WHERE ean={$ean} AND id_tournee={$_SESSION['numTournee']} AND codemag={$codemag} AND receive=0");
 		// Non existant -> Enregistrement
 		if (empty($listes)){
 			$data    = array('codemag'=>$codemag, 'ean'=>$ean, 'receive'=>0, 'id_tournee'=>$_SESSION['numTournee']);       
@@ -63,8 +63,8 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 	    <form method="POST" action="chargement.php" name="chargement">
 	     	
 	     	Code client : </br>
-	     	<input type="text" name="codemag" id="codemag" maxlength="5" onkeydown="if(event.keyCode==13) event.keyCode=9;"></br>
-
+	     	<input type="text" name="codemag" id="codemag" maxlength="5" onkeydown="if(event.keyCode==13) event.keyCode=9;" onchange="libelleMagasin()"></br>
+			<div id="libellemag"></div>
 			EAN : </br>
 	     	<input type="text" name="ean" id="ean" maxlength="45"></br>
 
@@ -80,4 +80,31 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 			echo "";
 		 ?>
     </body>
+
+<script>
+	function libelleMagasin()
+	{
+	var codeMagasin = document.getElementById("codemag").value;
+	var xhr;
+	 if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+	    xhr = new XMLHttpRequest();
+	} else if (window.ActiveXObject) { // IE 8 and older
+	    xhr = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	var data = "codeMagasin=" + codeMagasin;
+	     xhr.open("POST", "recherche-mag.php", true); 
+	     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");                  
+	     xhr.send(data);
+		 xhr.onreadystatechange = display_data;
+		function display_data() {
+		 if (xhr.readyState == 4) {
+	      if (xhr.status == 200) {
+		  document.getElementById("libellemag").innerHTML = xhr.responseText;
+	      } else {
+	        alert('Problème de connexion.');
+	      }
+	     }
+		}
+}
+</script>
 </html>
