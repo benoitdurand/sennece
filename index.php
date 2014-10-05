@@ -1,3 +1,23 @@
+<?php 
+	include 'includes.php'; 
+
+	if(isset($_SESSION['tournee'])){
+		unset($_SESSION['tournee']);
+	}
+
+	if(isset($_SESSION['numTournee'])){
+		unset($_SESSION['numTournee']);
+	}
+
+	if(isset($_SESSION['numPalette'])){
+		unset($_SESSION['numPalette']);
+	}
+
+	if(isset($_SESSION['idTournee'])){
+		unset($_SESSION['idTournee']);
+	}
+?>
+
 <!doctype html>
     <head>
         <meta charset="utf-8">

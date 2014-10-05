@@ -1,15 +1,11 @@
 <?php 
 include 'includes.php'; 
 
-$table     = T_PALETTE;
-$DB->table = $table;
-$jour      = date('w');
-
-
 if (isset($_GET['value'])) {
-	$compteur  = $DB->getAndUpdateCompteur();
-	$site = intval ($_GET['value']);
-	$tournee = str_pad($compteur,5,"0",STR_PAD_LEFT)."-";
+	$jour     = date('w');
+	$compteur = $DB->getAndUpdateCompteur();
+	$site     = intval ($_GET['value']);
+	$tournee  = str_pad($compteur,5,"0",STR_PAD_LEFT)."-";
 	
 	if ($site == 0) {
 		// Salon vers GRANS
@@ -18,8 +14,8 @@ if (isset($_GET['value'])) {
 		// Grans vers SALON
 		$tournee .= (string) 1000 * $jour + 800;
 	}
-	$_SESSION['tournee']= $tournee;
 
+	$_SESSION['tournee']    = $tournee;
 	$table                  = T_TOURNEE;
 	$DB->table              = $table;
 	$numTournee             = $DB->insertIntoDB(array('numtournee'=>$tournee));
