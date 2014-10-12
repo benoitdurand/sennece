@@ -35,8 +35,8 @@ if (isset($_POST) && isset($_POST['tournee'])) {
 						<th class="text-center col-sm-1"><strong>EAN</th>
 						<th class="text-center col-sm-1"><strong>Codecli</strong></th>
 						<th class="text-center col-sm-3"><strong>Magasin</strong></th>
-						<th class="text-center col-sm-1"><strong>Chargement</strong></th>
-						<th class="text-center col-sm-1"><strong>Reception</strong></th>
+						<th class="text-center col-sm-2"><strong>Chargement</strong></th>
+						<th class="text-center col-sm-2"><strong>Reception</strong></th>
 					</tr>
 				</thead>
 				<tbody>

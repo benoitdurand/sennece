@@ -4,14 +4,29 @@
 	$table     = T_PALETTE;
 	$DB->table = $table;
 
-	$listes = $DB->query("SELECT id_tournee, numtournee, count(id_tournee) as nbexp, sum(receive) as nbrec, min(dateheure_exp) as debutchargement, max(dateheure_exp) as finchargement, min(dateheure_rec) as debutreception, max(dateheure_rec) as finreception, timestampdiff(MINUTE,min(dateheure_exp),max(dateheure_exp)) as tempschargement, timestampdiff(MINUTE, min(dateheure_rec), max(dateheure_rec)) as tempsreception, timestampdiff(MINUTE,max(dateheure_exp),min(dateheure_rec)) as attente,timestampdiff(MINUTE,min(dateheure_exp),max(dateheure_rec)) as total from palette join tournee on palette.id_tournee=tournee.id group by id_tournee ORDER BY numtournee DESC");
+	if (isset($_POST) && (isset($_POST['date']))) {
+		$range  = $_POST['date'];
+		$jour   = date('w');
+		// Penser a remettre $jour == 1
+
+			if ($range == "jour") {
+				$dateRange = ($jour == 0) ? 2 : 1;
+				$title = "Liste des chargements et receptions du jour et de la veille.";
+			} elseif ($range == "semaine") {
+				$title = "Liste des chargements et receptions de la semaine.";
+				$dateRange = ($jour == 0) ? 7 : $jour;
+			}		
+
+			$sql = "SELECT id_tournee, numtournee, count(id_tournee) as nbexp, sum(receive) as nbrec, min(dateheure_exp) as debutchargement, max(dateheure_exp) as finchargement, min(dateheure_rec) as debutreception, max(dateheure_rec) as finreception, timestampdiff(MINUTE,min(dateheure_exp),max(dateheure_exp)) as tempschargement, timestampdiff(MINUTE, min(dateheure_rec), max(dateheure_rec)) as tempsreception, timestampdiff(MINUTE,max(dateheure_exp),min(dateheure_rec)) as attente,timestampdiff(MINUTE,min(dateheure_exp),max(dateheure_rec)) as total from palette join tournee on palette.id_tournee=tournee.id WHERE dateheure_exp >= CURDATE() - INTERVAL {$dateRange} day group by id_tournee ORDER BY numtournee DESC";
+			$listes = $DB->query($sql);
+	}
 	include 'header.php';
 
 ?>
 
 <div class="container">
 	<div class="row">
-			<h1>Liste des chargements et receptions</h1>
+			<?php echo "<h1>$title</h1>"; ?>
 			<table id="tabledb" class="table table-bordered table-hover">
 				<thead>
 					<tr>
