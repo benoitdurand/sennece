@@ -13,5 +13,5 @@
             <script src="js/jquery.dataTables.min.js"></script>
             <script src="js/dataTables.bootstrap.js"></script>
             <script src="//code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
-            <script src="js/dashboard.js" type="text/javascript"></script>
+            <script src="js/bootstrap.min.js" type="text/javascript"></script>
 </head>

@@ -5,6 +5,7 @@ require 'config.inc.php';
 require 'classes/db.php';
 require 'classes/texte.php';
 require 'classes/user.php';
+require 'classes/mpdf.php';
 
 date_default_timezone_set('UTC');
 setlocale (LC_TIME, 'fr_FR','fra'); 
