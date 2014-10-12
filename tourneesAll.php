@@ -10,10 +10,10 @@
 		// Penser a remettre $jour == 1
 
 			if ($range == "jour") {
-				$dateRange = ($jour == 0) ? 2 : 1;
-				$title = "Liste des chargements et receptions du jour et de la veille.";
+				$dateRange = ($jour == 1) ? 2 : 1;
+				$title = "Chargements et receptions du jour et de la veille.";
 			} elseif ($range == "semaine") {
-				$title = "Liste des chargements et receptions de la semaine.";
+				$title = "Chargements et receptions du ".date('d/m/y', strtotime('Last Monday'))." au ".date('d-m-y', strtotime('Sunday'));
 				$dateRange = ($jour == 0) ? 7 : $jour;
 			}		
 
@@ -113,5 +113,7 @@ $('.detailModal').on('shown.bs.modal', function () {
                                height:'auto', 
                               'max-height':'100%'});
 });
+
+
 
 </script>

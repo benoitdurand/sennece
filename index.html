@@ -39,14 +39,14 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
                 <li id="tourneeJ"><a href="#">Tournées du jour</a></li>
-                <li id="tourneeS"><a href="#">Tournées de la semaine</a></li>
+                <li id="tourneeS"><a href="#">Tournées sur 1 semaine</a></li>
                 
               </ul>
               <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Recherche">
+                  <input type="text" id = "ean" class="form-control" placeholder="EAN">
                 </div>
-                <button type="submit" class="btn btn-default">Envoyer</button>
+                <button type='button' class='btn btn-primary' id ="recherche" onclick="search()">Rechercher</button>
               </form>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
@@ -54,4 +54,15 @@
 
     <div id="data"></div>
 </body>
-</html> 
+</html>
+
+<script>
+    function search () {
+        var ean = document.getElementById("ean").value.trim();
+        if (ean.length > 0 ) { 
+            $.post ("getEan.php", {ean:ean} , function(data){
+                $( "#data" ).empty().append( data );
+            });
+        }    
+    }
+</script>
