@@ -4,6 +4,7 @@
 	<meta charset="utf-8">
 	<title>Chargement GRANS</title>
             <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+            <link rel="stylesheet" href="css/style.css">
             <link rel="stylesheet" href="css/bootstrap.min.css">
             <link rel="stylesheet" href="css/jquery.dataTables.min.css">
 

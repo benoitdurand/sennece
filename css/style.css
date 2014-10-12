@@ -48,13 +48,6 @@ table {
 }
 
 
-body {
-	padding-top: 60px;
-}
-
-table{
-	margin-top: 15px;
-}
 
 .input {
 	border: 1px solid #DDD;
@@ -106,4 +99,9 @@ table{
 }
 .bs-callout-info h4 {
   color: #34789a;
+}
+
+#tabledb thead th {
+  background-color: #6885b0;
+  color: white;
 }

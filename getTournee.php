@@ -14,7 +14,7 @@ if (isset($_POST) && isset($_POST['tournee'])) {
 
 	<div class="container">
 	<div class="row">
-					<div class="alert alert-warning" id="<?= $stats[0]['numtournee'] ?>"><h2>Tournée : <?= $stats[0]['numtournee'] ?></h2></div>
+					<div class="alert alert-warning"><h2>Tournée : <?= $stats[0]['numtournee'] ?></h2></div>
 					<?php
 							if ($stats[0]['nbrec'] != $stats[0]['nbexp']) {
 								$result = $stats[0]['nbexp'] - $stats[0]['nbrec'];
@@ -29,7 +29,7 @@ if (isset($_POST) && isset($_POST['tournee'])) {
 					?>
 					
 			
-			<table id="tabledbdetail" class="table table-hover">
+			<table id="tabledbdetail" class="table table-hover table-striped">
 				<thead>
 					<tr>
 						<th class="text-center col-sm-1"><strong>#</th>

@@ -3,11 +3,7 @@ include 'includes.php';
 
 $table     = T_PALETTE;
 $DB->table = $table;
-
-// select c.ean, c.codemag, clt.libelle, dateheure from camion as c JOIN client as clt ON RIGHT('00000'+c.codemag,5) = RIGHT('00000'+clt.codecli,5);
-
-// $listes = $DB->query("SELECT * FROM ".T_CAMION." ORDER BY dateheure DESC");
-	$listes = $DB->query("SELECT c.ean, c.codemag, clt.libelle, dateheure_exp, dateheure_rec, c.id_tournee, t.numtournee FROM {$table} AS c LEFT JOIN ".T_CLIENT." AS clt ON RIGHT('00000'+c.codemag,5) = RIGHT('00000'+clt.codecli,5) JOIN ".T_TOURNEE." AS t ON c.id_tournee=t.id WHERE DATE(dateheure_exp)=CURDATE() ORDER BY dateheure_exp DESC");
+	$listes = $DB->query("SELECT count(distinct id_tournee) as tournee, date(dateheure_exp) as jour, count(ean) as totalEan from palette group by jour order by jour DESC");
 
 include 'header.php';
 
@@ -16,7 +12,7 @@ include 'header.php';
 <script>
 	$(document).ready(function() 
     { 
-        $('#tabledb').DataTable( {
+        $('#tabledbJour').DataTable( {
     	language: {
         processing:     "Traitement en cours...",
         search:         "Rechercher&nbsp;:",
@@ -39,44 +35,33 @@ include 'header.php';
             sortDescending: ": activer pour trier la colonne par ordre décroissant"
         }
     },
-		"order"			: [[ 4, "desc" ]],
-		"pagingType"	: "full",
-		"scrollY"		: "700px",
-		"scrollX"		: true,
+		"order"			: [[ 0, "desc" ]],
+		"searching"		: true,
 		"scrollCollapse": false,
-		"paging"		: false
+		"paging"		: false,
+		"lengthChange"	: false,
+		"processing"	: true,
+		"autoWidth"		: false
 	})
 });
+
 </script>
 <div class="container">
 	<div class="row">
 	
-			<h1>Liste des chargements du jour</h1>
-			<table id="tabledb" class="table table-bordered table-striped">
+			<h1>Détail par jour</h1>
+			<table id="tabledbJour" class="table table-bordered table-striped">
 				<thead>
 					<tr>
-						<th class="text-center col-lg-1 col-md-1"><strong>Tournée</th>
-						<th class="text-center col-lg-2"><strong>EAN Palette</strong></th>
-						<th class="text-center col-lg-1 col-md-1"><strong>Code client</strong></th>
-						<th class="text-center col-lg-3"><strong>Magasin</strong></th>
-						<th class="text-center col-lg-1 col-md-1"><strong>Exp.</strong></th>
-						<th class="text-center col-lg-1 col-md-1"><strong>Rec.</strong></th>
-
+						<th class="text-center col-md-2">Date</th>
+						<th class="text-center col-md-1">NB Tournées</strong></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php foreach ($listes as $liste): ?>
-					<tr>
-							<td class="text-right col-lg-1 col-md-1"><?php echo $liste->numtournee; ?></td>
-							<td class="text-right col-lg-2 col-md-1"><?php echo $liste->ean; ?></td>
-							<td class="text-right col-lg-1 col-md-1"><?php echo $liste->codemag; ?></td>
-							<td class="text-left col-lg-3 col-md-1"><?php echo $liste->libelle; ?></td>
-							<td class="text-right col-lg-1 col-md-1"><?php echo texte::extract_time($liste->dateheure_exp); ?></td>
-							<?php if (!empty($liste->dateheure_rec)) {
-								echo "<td class='text-right col-lg-1 col-md-1'>".texte::extract_time($liste->dateheure_rec)."</td>";
-							} else {
-								echo "<td class='text-center col-lg-1 col-md-1'>En cours</td>";
-							} ?>
+					<tr onclick="tourneeJour('<?= $liste->jour ?>')">
+							<td class="text-right col-md-2"><?php echo $liste->jour; ?></td>
+							<td class="text-right col-md-1"><?php echo $liste->tournee; ?></td>
 					</tr>
 					<?php endforeach ?>
 				</tbody>
