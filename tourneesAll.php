@@ -83,8 +83,8 @@
 			    </div>
       				<div class="modal-body"></div>
 	    			<div class="modal-footer">
-	        			<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
 	        			<button type='button' class='btn btn-primary' id ="exportcsv" onclick="exportcsv()">Exporter</button>
+	        			<button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
 	      			</div>
     			</div>
   			</div>

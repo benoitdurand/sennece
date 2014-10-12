@@ -8,7 +8,7 @@ if (isset($_POST) && isset($_POST['tournee'])) {
 	$tournee = $_POST['tournee'];
 	$stats = $DB->tquery ("SELECT id_tournee, numtournee, count(id_tournee) as nbexp, sum(receive) as nbrec, min(dateheure_exp) as debutchargement, max(dateheure_exp) as finchargement, min(dateheure_rec), max(dateheure_rec) from palette join tournee on palette.id_tournee=tournee.id  WHERE id_tournee={$tournee} group by id_tournee");
 
-	$listes = $DB->query("SELECT ean, codemag, libelle, id_tournee, numtournee, dateheure_exp, dateheure_rec from palette join client on LPAD(client.codecli,5,'0')=LPAD(palette.codemag,5,'0') join tournee on tournee.id=id_tournee WHERE id_tournee={$tournee}");
+	$listes = $DB->query("SELECT ean, codemag, libelle, id_tournee, numtournee, dateheure_exp, dateheure_rec from palette join client on LPAD(client.codecli,5,'0')=LPAD(palette.codemag,5,'0') join tournee on tournee.id=id_tournee WHERE id_tournee={$tournee} ORDER BY dateheure_exp DESC");
 	}
 ?>
 	<div class="container">
@@ -28,7 +28,7 @@ if (isset($_POST) && isset($_POST['tournee'])) {
 					?>
 					
 			
-			<table id="tabledb" class="table table-hover">
+			<table id="tabledbdetail" class="table table-hover">
 				<thead>
 					<tr>
 						<th class="text-center col-sm-1"><strong>#</th>
@@ -62,3 +62,39 @@ if (isset($_POST) && isset($_POST['tournee'])) {
 			</table>		
 	</div>
 </div>
+
+<script>
+	$(document).ready(function() {
+    $('#tabledbdetail').DataTable( {
+    	language: {
+        processing:     "Traitement en cours...",
+        search:         "Rechercher&nbsp;:",
+        lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
+        info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+        infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        infoPostFix:    "",
+        loadingRecords: "Chargement en cours...",
+        zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        emptyTable:     "Aucune donnée disponible dans le tableau",
+        paginate: {
+            first:      "Premier",
+            previous:   "Pr&eacute;c&eacute;dent",
+            next:       "Suivant",
+            last:       "Dernier"
+        },
+        aria: {
+            sortAscending:  ": activer pour trier la colonne par ordre croissant",
+            sortDescending: ": activer pour trier la colonne par ordre décroissant"
+        }
+    },
+		"order"			: [[ 4, "desc" ]],
+		"searching"		: false,
+		"scrollCollapse": false,
+		"paging"		: false,
+		"lengthChange"	: false,
+		"processing"	: true,
+		"autoWidth"		: false
+	})
+} );
+</script>
