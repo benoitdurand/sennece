@@ -1,3 +1,7 @@
+<!--
+	12/10/14 : Modification du calcul du numéro de tournée.
+	
+-->
 <?php 
 include '../includes.php'; 
 
@@ -8,12 +12,12 @@ if (isset($_GET['value'])) {
 	$tournee  = str_pad($compteur,5,"0",STR_PAD_LEFT)."-";
 	
 	if ($site == 0) {
-		// Salon vers GRANS
-		$calcul = 1000 * $jour + 100;
-		$tournee .= str_pad($calcul,4,"0",STR_PAD_LEFT);
-	} else {
 		// Grans vers SALON
 		$calcul = 1000 * $jour + 800;
+		$tournee .= str_pad($calcul,4,"0",STR_PAD_LEFT);
+	} else {
+		// Salon vers GRANS
+		$calcul = 1000 * $jour + 100;
 		$tournee .= str_pad($calcul,4,"0",STR_PAD_LEFT);
 	}
 

@@ -69,7 +69,6 @@
       				<div class="modal-body"></div>
 	    			<div class="modal-footer">
 	        			<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-	        			<button type="button" class="btn btn-primary" id ="exportpdf" onClick="exportpdf()" data-dismiss="modal">PDF</button>
 	        			<button type='button' class='btn btn-primary' id ="exportcsv" onclick="exportcsv()">Exporter</button>
 	      			</div>
     			</div>
@@ -82,15 +81,10 @@ function exportCSV(id) {
 	document.location.href = "exportcsv.php?tournee="+id;
 }
 
-function exportPDF(id) {
-	document.location.href = "exportpdf.php?tournee="+id;
-}
-
 function detailModal(id){
   	$.post ("getTournee.php", {tournee:id} , function(data){
   		$( ".modal-body" ).empty().append( data );
   		$( '#exportcsv').attr("onClick", "exportCSV("+id+")");
-  		$( '#exportcsv').attr("onClick", "exportPDF("+id+")");
   	});
 
   $('.detailModal').modal({
