@@ -66,13 +66,15 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
     <body OnLoad="document.chargement.codemag.focus()">
 		<h4>Tournée : <?= $_SESSION['tournee'] ?></h4>
 		
-	    <form method="POST" action="chargement.php" name="chargement">
+	    <form method="POST" action="chargement.php" name="chargement" onsubmit="return validateEAN()">
 	     	
 	     	Code client : </br>
-	     	<input type="text" name="codemag" id="codemag" maxlength="5" onkeydown="if(event.keyCode==13) event.keyCode=9;" onchange="libelleMagasin()"></br>
+	     	<input type="text" name="codemag" id="codemag" maxlength="5" onkeydown="if(event.keyCode==13) event.keyCode=9;" onchange="return libelleMagasin()"></br>
 			<div id="libellemag"></div>
-			EAN : </br>
-	     	<input type="text" name="ean" id="ean" maxlength="45"></br>
+
+			EAN (8 car. mini...) : </br>
+	     	<input type="text" name="ean" id="ean" maxlength="15"></br>
+	     	<div id="erreurEan" style ='color:red'></div>
 
 	     	<input type="submit" value="Valider">
 	     	<button type="button" onclick="location.href='index.php'">Fin chargement</button>
@@ -88,9 +90,25 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
     </body>
 
 <script>
+	
+	function validateEAN(){
+		var ean = document.getElementById("ean").value;
+		if (ean.length < 8) {
+			alert ("Le code EAN doit faire au moins 8 caractères !");
+			//document.getElementById("erreurEan").innerHTML="<span>Code EAN erroné...</span><bgsound src='file://\Application\alert.wav'>";
+			document.chargement.ean.focus();
+			return false;
+		} else {
+			return true;
+		}
+
+	}
+
+
 	function libelleMagasin()
 	{
 	var codeMagasin = document.getElementById("codemag").value;
+	if (codeMagasin.length >= 3){
 	var xhr;
 	 if (window.XMLHttpRequest) { // Mozilla, Safari, ...
 	    xhr = new XMLHttpRequest();
@@ -106,11 +124,18 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 		 if (xhr.readyState == 4) {
 	      if (xhr.status == 200) {
 		  document.getElementById("libellemag").innerHTML = xhr.responseText;
+		  return true;
 	      } else {
 	        alert('Problème de connexion.');
+	        return false;
 	      }
 	     }
 		}
+	} else {
+		alert ("Le code magasin doit faire au moins 3 caractères !");
+		document.chargement.codemag.focus();
+		return false;
+	}
 }
 </script>
 </html>

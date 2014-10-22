@@ -3,7 +3,7 @@ include 'includes.php';
 
 $table     = T_PALETTE;
 $DB->table = $table;
-	$listes = $DB->query("SELECT count(distinct id_tournee) as tournee, date(dateheure_exp) as jour, count(ean) as totalEan from palette group by jour order by jour DESC");
+	$listes = $DB->query("SELECT count(distinct id_tournee) as tournee, date(dateheure_exp) as jour, count(ean) as totalEan, sum(receive) as recept from palette where id_tournee IS NOT NULL group by jour order by jour DESC");
 
 include 'header.php';
 
@@ -49,12 +49,15 @@ include 'header.php';
 <div class="container">
 	<div class="row">
 	
-			<h1>Détail par jour</h1>
-			<table id="tabledbJour" class="table table-bordered table-striped">
+			<div class="alert alert-info text-center"><h1>Détail par jour</h1></div>
+			<table id="tabledb" class="table table-bordered table-striped">
 				<thead>
 					<tr>
-						<th class="text-center col-md-2">Date</th>
-						<th class="text-center col-md-1">NB Tournées</strong></th>
+						<th class="text-center col-md-2"><strong>Date</strong></th>
+						<th class="text-center col-md-1"><strong>NB Tournées</strong></th>
+						<th class="text-center col-md-1"><strong>Chargement</strong></th>
+						<th class="text-center col-md-1"><strong>Reception</strong></th>
+						<th class="text-center col-md-1"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -62,6 +65,9 @@ include 'header.php';
 					<tr onclick="tourneeJour('<?= $liste->jour ?>')">
 							<td class="text-right col-md-2"><?php echo $liste->jour; ?></td>
 							<td class="text-right col-md-1"><?php echo $liste->tournee; ?></td>
+							<td class="text-right col-md-1"><?php echo $liste->totalEan; ?></td>
+							<td class="text-right col-md-1"><?php echo $liste->recept; ?></td>
+							<td class='text-center col-md-1'><a href='export_tournee_csv.php?date=<?php echo $liste->jour; ?>' type='button' class='btn btn-success btn-sm'><span class='glyphicon glyphicon-export'></span></a></td>
 					</tr>
 					<?php endforeach ?>
 				</tbody>

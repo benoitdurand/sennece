@@ -11,21 +11,21 @@
 
 			if ($range == "jour") {
 				$dateRange = ($jour == 1) ? 2 : 1;
-				$day1 = date('Y-m-d', strtotime('now'))." 00:00:00";
-				$day2 = date('Y-m-d', strtotime('-'.$dateRange.' days '))." 23:59:59";
-				$title = "Chargements et receptions du ".date('d-m-y', strtotime('now'))." et du ".date('d-m-Y', strtotime('-'.$dateRange.' days '));
+				$day1 = date('Y-m-d', strtotime('now'));
+				$day2 = date('Y-m-d', strtotime('-'.$dateRange.' days '));
+				$title = "Chargements et receptions du ".date('d-m-y', strtotime('now'))." et du ".date('d-m-y', strtotime('-'.$dateRange.' days '));
 			} elseif ($range == "semaine") {
-				$day1 = date('Y-m-d', strtotime('Last Monday'))." 00:00:00";
-				$day2 = date('Y-m-d', strtotime('Sunday'))." 23:59:59";
+				$day2 = date('Y-m-d', strtotime('Last Monday'));
+				$day1 = date('Y-m-d', strtotime('Sunday'));
 				$title = "Chargements et receptions du ".date('d-m-Y', strtotime('Last Monday'))." au ".date('d-m-Y', strtotime('Sunday'));
 			} else {
-				$day1 = date('Y-m-d', strtotime($range))." 00:00:00";
-				$day2 = date('Y-m-d', strtotime($range))." 23:59:59";
+				$day1 = date('Y-m-d', strtotime($range));
+				$day2 = date('Y-m-d', strtotime($range));
 				$title = "Chargements et receptions du ".$range;
 			}
 
 			$sql = "SELECT id_tournee, numtournee, count(id_tournee) as nbexp, sum(receive) as nbrec, min(dateheure_exp) as debutchargement, max(dateheure_exp) as finchargement, min(dateheure_rec) as debutreception, max(dateheure_rec) as finreception 
-						from palette join tournee on palette.id_tournee=tournee.id WHERE dateheure_exp BETWEEN '$day1' AND '$day2' group by id_tournee ORDER BY numtournee DESC";
+						from palette join tournee on palette.id_tournee=tournee.id WHERE date(dateheure_exp) BETWEEN '$day2' AND '$day1' group by id_tournee ORDER BY numtournee DESC";
 			$listes = $DB->query($sql);
 	}
 	include 'header.php';
@@ -55,7 +55,21 @@
 				<tbody>
 					<?php foreach ($listes as $liste): ?>
 					<tr data-id="<?= $liste->id_tournee ?>" onclick="detailModal(<?= $liste->id_tournee ?>)">
-							<td class="text-right warning"><strong><?php echo $liste->numtournee; ?></strong></td>
+							<?php
+								$tourn = substr($liste->numtournee, -3) == "800"? " (G->S)" : " (S->G)";  
+								if (empty($liste->debutreception)) {
+									$now = strtotime(date('Y-m-d H:i:s'));
+									$last = strtotime($liste->finchargement);
+									$temp = (int)($now-$last)/60;
+									if ($temp > 120) {
+										echo "<td class='text-right danger'><span class='glyphicon glyphicon-time'></span> <strong>  $liste->numtournee $tourn</strong></td>";
+									} else {
+										echo "<td class='text-right warning'><strong>$liste->numtournee $tourn</strong></td>";
+									}
+								}  else {
+										echo "<td class='text-right info'><strong>$liste->numtournee $tourn</strong></td>";
+									}
+							?>
 							<td class="text-right"><?php echo texte::short_french_date_time($liste->debutchargement); ?></td>
 							<td class="text-right"><?php echo texte::short_french_date_time($liste->finchargement); ?></td>
 							<td class="text-right success"><?php echo $liste->nbexp; ?></td>
@@ -117,7 +131,7 @@ function detailModal(id){
 };
 
 $('.detailModal').on('shown.bs.modal', function () {
-    $(this).find('.modal-dialog').css({width:'90%',
+    $(this).find('.modal-dialog').css({width:'100%',
                                height:'auto', 
                               'max-height':'100%'});
 });

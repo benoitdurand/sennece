@@ -6,7 +6,6 @@ require 'classes/db.php';
 require 'classes/texte.php';
 require 'classes/user.php';
 
-date_default_timezone_set('UTC');
 setlocale (LC_TIME, 'fr_FR','fra'); 
 setlocale(LC_CTYPE, 'fr_FR.UTF8');
 setlocale (LC_ALL, 'fr_FR.utf8');

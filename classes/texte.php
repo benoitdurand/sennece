@@ -39,6 +39,12 @@ class Texte{
 		return $blocs[1];
 	}
 
+	public static function extract_date($d){
+		$blocs = explode(' ',$d);
+		$date = explode ('-',$blocs[0]);
+		return $date[2].'/'.$date[1].'/'.$date[0];
+	}
+
 	public static function generer($nbr){
 		$string ='';
 		$chaine ="abcdefghijklmnopqrstuvwxyz0123456789@!-/*()ABCEFGHIJKLMNOPQRSTUVWXYZ";

@@ -9,6 +9,7 @@ if (isset($_POST) && isset($_POST['ean'])) {
 
 	$listes = $DB->query("SELECT ean, codemag, libelle, id_tournee, numtournee, dateheure_exp, dateheure_rec from palette join client on LPAD(client.codecli,5,'0')=LPAD(palette.codemag,5,'0') join tournee on tournee.id=id_tournee WHERE ean LIKE '%".$ean."%'");
 	}
+include 'header.php';
 ?>
 
 	<div class="container">

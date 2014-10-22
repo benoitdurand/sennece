@@ -8,17 +8,18 @@ if (isset($_POST) && isset($_POST['tournee'])) {
 	$tournee = $_POST['tournee'];
 	$stats = $DB->tquery ("SELECT id_tournee, numtournee, count(id_tournee) as nbexp, sum(receive) as nbrec, min(dateheure_exp) as debutchargement, max(dateheure_exp) as finchargement, min(dateheure_rec), max(dateheure_rec) from palette join tournee on palette.id_tournee=tournee.id  WHERE id_tournee={$tournee} group by id_tournee");
 
-	$listes = $DB->query("SELECT ean, codemag, libelle, id_tournee, numtournee, dateheure_exp, dateheure_rec from palette join client on LPAD(client.codecli,5,'0')=LPAD(palette.codemag,5,'0') join tournee on tournee.id=id_tournee WHERE id_tournee={$tournee} ORDER BY dateheure_exp DESC");
+	$listes = $DB->query("SELECT ean, codemag, libelle, id_tournee, numtournee, dateheure_exp, dateheure_rec from palette left join client on LPAD(client.codecli,5,'0')=LPAD(palette.codemag,5,'0') join tournee on tournee.id=id_tournee WHERE id_tournee={$tournee} ORDER BY dateheure_exp DESC");
 	}
 ?>
 
 	<div class="container">
 	<div class="row">
-					<div class="alert alert-warning"><h2>Tournée : <?= $stats[0]['numtournee'] ?></h2></div>
+					<?php $tourn = substr($stats[0]['numtournee'], -3) == "800"? " (Grans -> Salon)" : " (Salon -> Grans)";   ?>
+					<div class="alert alert-warning"><h2>Tournée : <?= $stats[0]['numtournee'].$tourn ?></h2></div>
 					<?php
 							if ($stats[0]['nbrec'] != $stats[0]['nbexp']) {
 								$result = $stats[0]['nbexp'] - $stats[0]['nbrec'];
-								$msg = "<div class='alert alert-danger'>Il manque <strong>".$result."</strong> ";
+								$msg = "<div class='bs-callout bs-callout-danger'>Il manque <strong>".$result."</strong> ";
 								if ($result >1) {
 									$msg .= "</strong> palettes</div>";
 								} else {
@@ -48,7 +49,12 @@ if (isset($_POST) && isset($_POST['tournee'])) {
 							<td class="text-right"><strong><?php echo str_pad($nbLignes,3,"0",STR_PAD_LEFT); ?></strong></td>
 							<td class="text-right"><strong><?php echo $liste->ean; ?></strong></td>
 							<td class="text-center"><?php echo $liste->codemag; ?></td>
-							<td class="text-left"><?php echo $liste->libelle; ?></td>
+							<?php if ($liste->libelle != "") {
+								echo "<td class='text-left'>$liste->libelle</td>";
+							} else {
+								echo "<td class='text-left'>-- Magasin inconnu --</td>";
+							}
+							?>	
 							<td class="text-right"><?php echo texte::short_french_date_time($liste->dateheure_exp); ?></td>
 							<?php if (!empty($liste->dateheure_rec)) {
 								echo "<td class='text-right'>".texte::short_french_date_time($liste->dateheure_rec)."</td>";
