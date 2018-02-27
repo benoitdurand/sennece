@@ -17,8 +17,6 @@ if (isset($_GET) && isset($_GET['tournee'])) {
     fputcsv($handle, [
         'Tournee',
         'Ean Palette',
-        'Code Magasin',
-        'Libelle Magasin',
         'Date Chargement',
         'Date Reception'
       ]);
@@ -27,8 +25,6 @@ if (isset($_GET) && isset($_GET['tournee'])) {
       fputcsv($handle, [
           $v['numtournee'],
           $v['ean'],
-          $v['codemag'],
-          $v['libelle'],
           $v['dateheure_exp'],
           $v['dateheure_rec']
         ]);

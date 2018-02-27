@@ -60,7 +60,7 @@ function dateDiff($date1, $date2){
     	$numJour = date('w', strtotime($range));
     	$jourLong = $jours[$numJour];
     	$tourn = $v->numtournee;
-    	$tourn .= substr($v->numtournee, -3) == "800"? " (G->S)" : " (S->G)";
+    	$tourn .= "";
     	$diff1 = dateDiff(strtotime($v->finchargement), strtotime($v->debutchargement));
     	$diff2 = dateDiff(strtotime($v->finreception), strtotime($v->debutreception));
     	$diff3 = dateDiff(strtotime($v->debutreception), strtotime($v->finchargement));

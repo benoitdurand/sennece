@@ -7,7 +7,7 @@
 #
 # Hôte: localhost (MySQL 5.6.21-log)
 # Base de données: sennece_chargement
-# Temps de génération: 2018-02-27 14:29:15 +0000
+# Temps de génération: 2018-02-27 15:00:49 +0000
 # ************************************************************
 
 
@@ -40,14 +40,12 @@ DROP TABLE IF EXISTS `palette`;
 CREATE TABLE `palette` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ean` varchar(45) DEFAULT NULL,
-  `codemag` varchar(5) DEFAULT NULL,
   `dateheure_exp` datetime DEFAULT CURRENT_TIMESTAMP,
   `dateheure_rec` datetime DEFAULT NULL,
   `receive` tinyint(1) unsigned DEFAULT NULL,
   `id_tournee` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ean` (`ean`),
-  KEY `codemag` (`codemag`),
   KEY `id_tournee` (`id_tournee`),
   KEY `dateheure_id_tournee` (`dateheure_exp`,`id_tournee`) USING BTREE,
   CONSTRAINT `fk_id_tournee` FOREIGN KEY (`id_tournee`) REFERENCES `tournee` (`id`)
