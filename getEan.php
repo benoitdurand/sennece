@@ -5,9 +5,9 @@ $table     = T_PALETTE;
 $DB->table = $table;
 
 if (isset($_POST) && isset($_POST['ean'])) {
-	$ean = $_POST['ean'];
+	$ean = substr($_POST['ean'], 0, 20);
 
-	$listes = $DB->query("SELECT ean, id_tournee, numtournee, dateheure_exp, dateheure_rec from palette join tournee on tournee.id=id_tournee WHERE ean LIKE '%".$ean."%'");
+	$listes = $DB->query("SELECT `ean`, `id_tournee`, `numtournee`, `dateheure_exp`, `dateheure_rec` FROM `palette` JOIN `tournee` ON `tournee`.`id` = `id_tournee` WHERE `ean` LIKE '%".$ean."%'");
 	}
 include 'header.php';
 ?>
@@ -55,7 +55,7 @@ include 'header.php';
     	language: {
         processing:     "Traitement en cours...",
         search:         "Rechercher&nbsp;:",
-        lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
+        lengthMenu:     "Afficher _MENU_ &eacute;l&eacute;ments",
         info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
         infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
         infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",

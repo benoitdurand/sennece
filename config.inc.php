@@ -11,6 +11,6 @@ define ("T_PALETTE","palette");
 define ("T_COMPTEUR","client");
 define ("T_TOURNEE","tournee");
 
-// GRANT Insert, Select, Update ON `grans1_chargement`.* TO `admin_chargement`@`localhost`;
+// GRANT Insert, Select, Update ON `sennece_chargement`.* TO `admin_sen_chgt`@`localhost`;
 
 ?>
