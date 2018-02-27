@@ -24,7 +24,7 @@
 				$title = "Chargements et receptions du ".$range;
 			}
 
-			$sql = "SELECT id_tournee, numtournee, count(id_tournee) as nbexp, sum(receive) as nbrec, min(dateheure_exp) as debutchargement, max(dateheure_exp) as finchargement, min(dateheure_rec) as debutreception, max(dateheure_rec) as finreception 
+			$sql = "SELECT id_tournee, numtournee, count(id_tournee) as nbexp, sum(receive) as nbrec, min(dateheure_exp) as debutchargement, max(dateheure_exp) as finchargement, min(dateheure_rec) as debutreception, max(dateheure_rec) as finreception
 						from palette join tournee on palette.id_tournee=tournee.id WHERE date(dateheure_exp) BETWEEN '$day2' AND '$day1' group by id_tournee ORDER BY numtournee DESC";
 			$listes = $DB->query($sql);
 	}
@@ -56,7 +56,7 @@
 					<?php foreach ($listes as $liste): ?>
 					<tr data-id="<?= $liste->id_tournee ?>" onclick="detailModal(<?= $liste->id_tournee ?>)">
 							<?php
-								$tourn = substr($liste->numtournee, -3) == "800"? " (G->S)" : " (S->G)";  
+								$tourn = "";
 								if (empty($liste->debutreception)) {
 									$now = strtotime(date('Y-m-d H:i:s'));
 									$last = strtotime($liste->finchargement);
@@ -92,7 +92,7 @@
 					</tr>
 					<?php endforeach ?>
 				</tbody>
-			</table>		
+			</table>
 	</div>
 </div>
 
@@ -111,6 +111,9 @@
     			</div>
   			</div>
 		</div>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
 
 <script>
 
@@ -132,7 +135,7 @@ function detailModal(id){
 
 $('.detailModal').on('shown.bs.modal', function () {
     $(this).find('.modal-dialog').css({width:'100%',
-                               height:'auto', 
+                               height:'auto',
                               'max-height':'100%'});
 });
 

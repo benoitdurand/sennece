@@ -1,39 +1,9 @@
-<!--
-	12/10/14 : Modification du calcul du numéro de tournée.
-	
--->
-<?php 
-include '../includes.php'; 
+<?php
+include '../includes.php';
 
-if (isset($_GET['value'])) {
-	$jour     = date('w');
-	$compteur = $DB->getAndUpdateCompteur();
-	$site     = intval ($_GET['value']);
-	$tournee  = str_pad($compteur,5,"0",STR_PAD_LEFT)."-";
-	
-	if ($site == 0) {
-		// Grans vers SALON
-		$calcul = 1000 * $jour + 800;
-		$tournee .= str_pad($calcul,4,"0",STR_PAD_LEFT);
-	} else {
-		// Salon vers GRANS
-		$calcul = 1000 * $jour + 100;
-		$tournee .= str_pad($calcul,4,"0",STR_PAD_LEFT);
-	}
-
-	$_SESSION['tournee']    = $tournee;
-	$table                  = T_TOURNEE;
-	$DB->table              = $table;
-	$numTournee             = $DB->insertIntoDB(array('numtournee'=>$tournee));
-	$_SESSION['numTournee'] = $numTournee;
-	$_SESSION['numPalette'] = 0;
-
-}
-
-if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
+if (!empty($_POST) & !empty($_POST['ean'])) {
 	$table     = T_PALETTE;
 	$DB->table = $table;
-	$codemag   = $_POST['codemag'];
 	$ean       = $_POST['ean'];
 	// $now     = strftime("%F %T");
 	$_SESSION['numPalette']++;
@@ -44,40 +14,49 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 	if (!empty($listes)) {
 		$id  = $listes[0]['id'];
 		$now = strftime("%F %T");
-		$nb  = $DB->updateDB(array('codemag' => $codemag, 'dateheure_exp'=>$now), $id);
+		$nb  = $DB->updateDB(array('dateheure_exp'=>$now), $id);
 	} else {
 		// Si ean, numéro de tournéee et code magasin existent on ne fait rien sinon nouvel enregistrement.
-		$listes = $DB->tquery("SELECT id FROM {$table} WHERE ean='{$ean}' AND id_tournee='{$_SESSION['numTournee']}' AND codemag='{$codemag}' AND receive=0");
+		$listes = $DB->tquery("SELECT id FROM {$table} WHERE ean='{$ean}' AND id_tournee='{$_SESSION['numTournee']}' AND receive=0");
 		// Non existant -> Enregistrement
 		if (empty($listes)){
-			$data    = array('codemag'=>$codemag, 'ean'=>$ean, 'receive'=>0, 'id_tournee'=>$_SESSION['numTournee']);       
+			$data    = array('ean'=>$ean, 'receive'=>0, 'id_tournee'=>$_SESSION['numTournee']);
 			$nb      = $DB->insertIntoDB($data);
 		}
 	}
+} else {
+	$jour     = date('w');
+	$compteur = $DB->getAndUpdateCompteur();
+	// Calcul du n° de tournée
+	// Afficher la date sous forme AAMMJJ
+	$tournee  = str_pad($compteur,5,"0",STR_PAD_LEFT)."-".date('ymd', strtotime('now'));
+
+	$_SESSION['tournee']    = $tournee;
+	$table                  = T_TOURNEE;
+	$DB->table              = $table;
+	$numTournee             = $DB->insertIntoDB(array('numtournee'=>$tournee));
+	$_SESSION['numTournee'] = $numTournee;
+	$_SESSION['numPalette'] = 0;
 }
 ?>
 
 <!doctype html>
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+	    <meta name="viewport" content="user-scalable=no">
         <title>Chargement</title>
+        <link rel="stylesheet" href="mobile.css">
     </head>
-    <body OnLoad="document.chargement.codemag.focus()">
+    <body OnLoad="document.chargement.ean.focus()">
 		<h4>Tournée : <?= $_SESSION['tournee'] ?></h4>
-		
+
 	    <form method="POST" action="chargement.php" name="chargement" onsubmit="return validateEAN()">
-	     	
-	     	Code client : </br>
-	     	<input type="text" name="codemag" id="codemag" maxlength="5" onkeydown="if(event.keyCode==13) event.keyCode=9;" onchange="return libelleMagasin()"></br>
-			<div id="libellemag"></div>
 
-			EAN (8 car. mini...) : </br>
-	     	<input type="text" name="ean" id="ean" maxlength="15"></br>
+	     	<input type="text" name="ean" id="ean" class="input-support" maxlength="20"></br>
 	     	<div id="erreurEan" style ='color:red'></div>
-
-	     	<input type="submit" value="Valider">
-	     	<button type="button" onclick="location.href='index.php'">Fin chargement</button>
+	     	<!-- <button id="button" type="submit"><strong>Valider</strong></button> -->
+	     	<br>
+	     	<button type="button" onclick="location.href='index.php'"><strong>Fin chargement</strong></button>
 	    </form>
 	    <?php
 			if ($_SESSION['numPalette'] > 1) {
@@ -90,7 +69,7 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
     </body>
 
 <script>
-	
+
 	function validateEAN(){
 		var ean = document.getElementById("ean").value;
 		if (ean.length < 8) {
@@ -102,39 +81,6 @@ if (!empty($_POST) & !empty($_POST['ean']) & !empty($_POST['codemag'])) {
 			return true;
 		}
 
-	}
-
-
-	function libelleMagasin()
-	{
-	var codeMagasin = document.getElementById("codemag").value;
-	if (codeMagasin.length >= 3){
-	var xhr;
-	 if (window.XMLHttpRequest) { // Mozilla, Safari, ...
-	    xhr = new XMLHttpRequest();
-	} else if (window.ActiveXObject) { // IE 8 and older
-	    xhr = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	var data = "codeMagasin=" + codeMagasin;
-	     xhr.open("POST", "recherche-mag.php", true); 
-	     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");                  
-	     xhr.send(data);
-		 xhr.onreadystatechange = afficherMagasin;
-		function afficherMagasin() {
-		 if (xhr.readyState == 4) {
-	      if (xhr.status == 200) {
-		  document.getElementById("libellemag").innerHTML = xhr.responseText;
-		  return true;
-	      } else {
-	        alert('Problème de connexion.');
-	        return false;
-	      }
-	     }
-		}
-	} else {
-		alert ("Le code magasin doit faire au moins 3 caractères !");
-		document.chargement.codemag.focus();
-		return false;
 	}
 }
 </script>

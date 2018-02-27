@@ -3,16 +3,56 @@ include 'includes.php';
 
 $table     = T_PALETTE;
 $DB->table = $table;
-	$listes = $DB->query("SELECT count(distinct id_tournee) as tournee, date(dateheure_exp) as jour, count(ean) as totalEan, sum(receive) as recept from palette where id_tournee IS NOT NULL group by jour order by jour DESC");
-
-include 'header.php';
+$listes = $DB->query("SELECT count(distinct id_tournee) as tournee, date(dateheure_exp) as jour, count(ean) as totalEan, sum(receive) as recept from palette where id_tournee IS NOT NULL group by jour order by jour DESC");
 
 ?>
 
+<!doctype html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<title>Chargement</title>
+            <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+            <link rel="stylesheet" href="css/style.css">
+            <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<div class="container">
+	<div class="row">
+		<div class="alert alert-info text-center"><h1>Détail par jour</h1></div>
+		<table id="tabledb" class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th class="text-center col-md-2"><strong>Date</strong></th>
+					<th class="text-center col-md-1"><strong>NB Tournées</strong></th>
+					<th class="text-center col-md-1"><strong>Chargement</strong></th>
+					<th class="text-center col-md-1"><strong>Reception</strong></th>
+					<th class="text-center col-md-1"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($listes as $liste): ?>
+					<tr onclick="tourneeJour('<?= $liste->jour ?>')">
+						<td class="text-right col-md-2"><?php echo $liste->jour; ?></td>
+						<td class="text-right col-md-1"><?php echo $liste->tournee; ?></td>
+						<td class="text-right col-md-1"><?php echo $liste->totalEan; ?></td>
+						<td class="text-right col-md-1"><?php echo $liste->recept; ?></td>
+						<td class='text-center col-md-1'><a href='export_tournee_csv.php?date=<?php echo $liste->jour; ?>' type='button' class='btn btn-success btn-sm'><span class='glyphicon glyphicon-export'></span></a></td>
+					</tr>
+				<?php endforeach ?>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+    <script src="js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="js/dataTables.bootstrap.js" type="text/javascript"></script>
+
 <script>
-	$(document).ready(function() 
-    { 
-        $('#tabledbJour').DataTable( {
+$(document).ready(function() {
+    $('#tabledb').DataTable( {
+		paging    	: true,
+		searching	: false,
     	language: {
         processing:     "Traitement en cours...",
         search:         "Rechercher&nbsp;:",
@@ -30,47 +70,14 @@ include 'header.php';
             next:       "Suivant",
             last:       "Dernier"
         },
-        aria: {
-            sortAscending:  ": activer pour trier la colonne par ordre croissant",
-            sortDescending: ": activer pour trier la colonne par ordre décroissant"
-        }
     },
-		"order"			: [[ 0, "desc" ]],
-		"searching"		: true,
+		"paging"		: true,
+		"order"			: [[ 1, "desc" ]],
 		"scrollCollapse": false,
-		"paging"		: false,
 		"lengthChange"	: false,
 		"processing"	: true,
-		"autoWidth"		: false
+		"autoWidth"		: true
 	})
-});
+} );
 
 </script>
-<div class="container">
-	<div class="row">
-	
-			<div class="alert alert-info text-center"><h1>Détail par jour</h1></div>
-			<table id="tabledb" class="table table-bordered table-striped">
-				<thead>
-					<tr>
-						<th class="text-center col-md-2"><strong>Date</strong></th>
-						<th class="text-center col-md-1"><strong>NB Tournées</strong></th>
-						<th class="text-center col-md-1"><strong>Chargement</strong></th>
-						<th class="text-center col-md-1"><strong>Reception</strong></th>
-						<th class="text-center col-md-1"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ($listes as $liste): ?>
-					<tr onclick="tourneeJour('<?= $liste->jour ?>')">
-							<td class="text-right col-md-2"><?php echo $liste->jour; ?></td>
-							<td class="text-right col-md-1"><?php echo $liste->tournee; ?></td>
-							<td class="text-right col-md-1"><?php echo $liste->totalEan; ?></td>
-							<td class="text-right col-md-1"><?php echo $liste->recept; ?></td>
-							<td class='text-center col-md-1'><a href='export_tournee_csv.php?date=<?php echo $liste->jour; ?>' type='button' class='btn btn-success btn-sm'><span class='glyphicon glyphicon-export'></span></a></td>
-					</tr>
-					<?php endforeach ?>
-				</tbody>
-			</table>
-	<div>
-</div>

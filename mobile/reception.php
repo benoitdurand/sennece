@@ -1,5 +1,5 @@
-<?php 
-include '../includes.php'; 
+<?php
+include '../includes.php';
 
 $numTournee = "";
 $nbPalettes = 0;
@@ -22,42 +22,47 @@ if (!empty($_POST) & !empty($_POST['ean'])) {
 		$_SESSION['idTournee']  = $idTournee;
 
 		// Nombre total de palette a receptionner.
-		$palettes   = $DB->tquery("SELECT COUNT(id_tournee) as total FROM {$table} WHERE id_tournee={$idTournee}");
+		$palettes   = $DB->tquery("SELECT COUNT(*) as total FROM {$table} WHERE id_tournee={$idTournee}");
 		$now        = strftime("%F %T");
 
 		// Nombre de palettes restant à receptionner.
 		$nb         = $DB->insert("UPDATE {$table} SET receive=1, dateheure_rec='{$now}' WHERE ean='{$ean}' AND receive=0");
-		$aFaire     = $DB->tquery("SELECT COUNT(id_tournee) as total FROM {$table} WHERE id_tournee={$idTournee} AND receive=0");
+		$aFaire     = $DB->tquery("SELECT COUNT(*) as total FROM {$table} WHERE id_tournee={$idTournee} AND receive=0");
 		$nbPalettes = $palettes[0]['total'];
 		$restant    = $aFaire[0]['total'];
 	} else {
-		echo "<div style='color:red'>La palette que vous venez de scanner est inconnue</div></br>";
+		$erreur = "Palette inconnue, contacter le responsable.";
 		echo "<bgsound src='file://\Application\alert.wav'>";
 	}
 }
 ?>
 
-<!doctype html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-        <title>Chargement</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+	<head>
+	    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+	    <meta name="viewport" content="user-scalable=no">
+	    <link rel="stylesheet" href="mobile.css">
+	    <title>Réception</title>
     </head>
     <body OnLoad="document.reception.ean.focus()">
 		<form method="POST" action="reception.php" name="reception">
+			<h4>reception</h4>
+	     	<input type="text" name="ean" id="ean" class="input-support" maxlength="20"></br>
+	     	<?php if (isset($erreur)) : ?>
+                <div id="error"><strong><?= $erreur; ?></strong></div>
+            <?php endif ?>
 
-			EAN : </br>
-	     	<input type="text" name="ean" id="ean" maxlength="45"></br>
-
-	     	<input type="submit" value="Valider">
-	     	<button type="button" onclick="location.href='index.php'">Fin reception</button>
+	     	<!-- <button id="button" type="submit"><strong>Valider</strong></button> -->
+	     	<button type="button" onclick="location.href='index.php'"><strong>Fin reception</strong></button>
 	    </form>
-
 
 	    <?php
 			echo("Tournée : $numTournee</br>");
 			echo("Nb total palettes : $nbPalettes</br>");
-			echo("Reste à flasher : $restant</br>");			
+			echo("Reste à flasher : $restant</br>");
 		 ?>
     </body>
 </html>

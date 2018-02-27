@@ -7,50 +7,45 @@ $DB->table = $table;
 if (isset($_POST) && isset($_POST['ean'])) {
 	$ean = $_POST['ean'];
 
-	$listes = $DB->query("SELECT ean, codemag, libelle, id_tournee, numtournee, dateheure_exp, dateheure_rec from palette join client on LPAD(client.codecli,5,'0')=LPAD(palette.codemag,5,'0') join tournee on tournee.id=id_tournee WHERE ean LIKE '%".$ean."%'");
+	$listes = $DB->query("SELECT ean, id_tournee, numtournee, dateheure_exp, dateheure_rec from palette join tournee on tournee.id=id_tournee WHERE ean LIKE '%".$ean."%'");
 	}
 include 'header.php';
 ?>
 
-	<div class="container">
+<div class="container">
 	<div class="row">
-			
-			<div class="alert alert-success text-center">
-				<h1>RESULTAT DE LA RECHERCHE</h1>
-				<h2>Palette : <?= $ean ?></h2>
-			</div>
-			<table id="tabledbdetail" class="table table-hover">
-				<thead>
-					<tr>
-						<th class="text-center col-sm-1"><strong>Palette</th>
-						<th class="text-center col-sm-1"><strong>Tournée</th>
-						<th class="text-center col-sm-1"><strong>Codecli</strong></th>
-						<th class="text-center col-sm-3"><strong>Magasin</strong></th>
-						<th class="text-center col-sm-2"><strong>Chargement</strong></th>
-						<th class="text-center col-sm-2"><strong>Reception</strong></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php 
-					$nbLignes = 1;
-					foreach ($listes as $liste): ?>
-					<tr>
-							<td class="text-right"><strong><?php echo $liste->ean; ?></strong></td>
-							<td class="text-right"><strong><?php echo $liste->numtournee; ?></strong></td>
-							<td class="text-center"><?php echo $liste->codemag; ?></td>
-							<td class="text-left"><?php echo $liste->libelle; ?></td>
-							<td class="text-right"><?php echo texte::short_french_date_time($liste->dateheure_exp); ?></td>
-							<?php if (!empty($liste->dateheure_rec)) {
-								echo "<td class='text-right'>".texte::short_french_date_time($liste->dateheure_rec)."</td>";
-							} else {
-								echo "<td class='text-center danger'><strong>Non receptionné</strong></td>";
-							} ?>
-					</tr>
-					<?php 
-					$nbLignes ++;
-					endforeach ?>
-				</tbody>
-			</table>		
+		<div class="alert alert-success text-center">
+			<h1>RESULTAT DE LA RECHERCHE</h1>
+			<h2>Palette : <?= $ean ?></h2>
+		</div>
+		<table id="tabledbdetail" class="table table-hover">
+			<thead>
+				<tr>
+					<th class="text-center col-sm-1"><strong>Palette</strong></th>
+					<th class="text-center col-sm-1"><strong>Tournée</strong></th>
+					<th class="text-center col-sm-2"><strong>Chargement</strong></th>
+					<th class="text-center col-sm-2"><strong>Reception</strong></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				$nbLignes = 1;
+				foreach ($listes as $liste): ?>
+				<tr>
+					<td class="text-right"><strong><?php echo $liste->ean; ?></strong></td>
+					<td class="text-right"><strong><?php echo $liste->numtournee; ?></strong></td>
+					<td class="text-right"><?php echo texte::short_french_date_time($liste->dateheure_exp); ?></td>
+					<?php if (!empty($liste->dateheure_rec)) {
+						echo "<td class='text-right'>".texte::short_french_date_time($liste->dateheure_rec)."</td>";
+					} else {
+						echo "<td class='text-center danger'><strong>Non receptionné</strong></td>";
+					} ?>
+				</tr>
+				<?php
+				$nbLignes ++;
+				endforeach ?>
+			</tbody>
+		</table>
 	</div>
 </div>
 
@@ -82,7 +77,7 @@ include 'header.php';
 		"order"			: [[ 4, "desc" ]],
 		"searching"		: false,
 		"scrollCollapse": false,
-		"paging"		: false,
+		"paging"		: true,
 		"lengthChange"	: false,
 		"processing"	: true,
 		"autoWidth"		: true

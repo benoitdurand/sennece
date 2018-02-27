@@ -6,8 +6,8 @@ $DB->table = $table;
 
 if (isset($_GET) && isset($_GET['tournee'])) {
 	$tournee = $_GET['tournee'];
-	
-	$listes = $DB->tquery("SELECT ean, codemag, libelle, id_tournee, numtournee, dateheure_exp, dateheure_rec from palette join client on LPAD(client.codecli,5,'0')=LPAD(palette.codemag,5,'0') join tournee on tournee.id=id_tournee WHERE id_tournee={$tournee}");
+
+	$listes = $DB->tquery("SELECT ean, id_tournee, numtournee, dateheure_exp, dateheure_rec from palette join tournee on tournee.id=id_tournee WHERE id_tournee={$tournee}");
 
 
 	header("Content-type: application/csv; charset=utf-8");

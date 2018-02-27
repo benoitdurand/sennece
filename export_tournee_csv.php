@@ -3,16 +3,16 @@
 function dateDiff($date1, $date2){
     $diff = abs($date1 - $date2); // abs pour avoir la valeur absolute, ainsi éviter d'avoir une différence négative
     $retour = array();
- 
+
     $tmp = $diff;
     $retour['second'] = str_pad($tmp % 60,2,'0',STR_PAD_LEFT);
- 
+
     $tmp = floor( ($tmp - $retour['second']) /60 );
     $retour['minute'] = str_pad($tmp % 60,2,'0',STR_PAD_LEFT);
- 
+
     $tmp = floor( ($tmp - $retour['minute'])/60 );
     $retour['hour'] = str_pad($tmp % 24,2,'0',STR_PAD_LEFT);
- 
+
     return $retour;
 }
 
@@ -24,9 +24,9 @@ function dateDiff($date1, $date2){
 	if (isset($_GET) && (isset($_GET['date']))) {
 		$range  = $_GET['date'];
 
-			$sql = "SELECT id_tournee, numtournee, count(id_tournee) as nbexp, sum(receive) as nbrec, min(dateheure_exp) as debutchargement, max(dateheure_exp) as finchargement, min(dateheure_rec) as debutreception, max(dateheure_rec) as finreception 
+			$sql = "SELECT id_tournee, numtournee, count(id_tournee) as nbexp, sum(receive) as nbrec, min(dateheure_exp) as debutchargement, max(dateheure_exp) as finchargement, min(dateheure_rec) as debutreception, max(dateheure_rec) as finreception
 						from palette join tournee on palette.id_tournee=tournee.id WHERE date(dateheure_exp) = '$range' group by id_tournee ORDER BY numtournee";
-			
+
 			$listes = $DB->query($sql);
 
 
@@ -42,13 +42,13 @@ function dateDiff($date1, $date2){
         'Heure Chgt Debut',
         'Date Chgt Fin',
         'Heure Chgt Fin',
-        'Durée Chgt',
+        'Duree Chgt',
         'Nb',
         'Date Recep. Debut',
         'Heure Recep. Debut',
         'Date Recep. Fin',
         'Heure Recep. Fin',
-        'Durée Recep',
+        'Duree Recep',
         'Nb',
         'Interval',
         'Duree totale',
