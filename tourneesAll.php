@@ -95,7 +95,6 @@
 			</table>
 	</div>
 </div>
-
 		<div class="modal fade detailModal"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   			<div class="modal-dialog modal-lg">
     			<div class="modal-content">
@@ -134,9 +133,9 @@ function detailModal(id){
 };
 
 $('.detailModal').on('shown.bs.modal', function () {
-    $(this).find('.modal-dialog').css({width:'100%',
-                               height:'auto',
-                              'max-height':'100%'});
+    // $(this).find('.modal-dialog').css({width:'50%',
+    //                            height:'auto',
+    //                           'max-height':'100%'});
 });
 
 

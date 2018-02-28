@@ -12,54 +12,52 @@ if (isset($_POST) && isset($_POST['tournee'])) {
 	}
 ?>
 
-	<div class="container">
 	<div class="row">
-					<?php $tourn = "";   ?>
-					<div class="alert alert-warning"><h2>Tournée : <?= $stats[0]['numtournee'].$tourn ?></h2></div>
-					<?php
-							if ($stats[0]['nbrec'] != $stats[0]['nbexp']) {
-								$result = $stats[0]['nbexp'] - $stats[0]['nbrec'];
-								$msg = "<div class='bs-callout bs-callout-danger'>Il manque <strong>".$result."</strong> ";
-								if ($result >1) {
-									$msg .= "</strong> palettes</div>";
-								} else {
-									$msg .= "</strong> palette</div>";
-								}
-								echo $msg;
-							}
-					?>
-
-
-			<table id="tabledbdetail" class="table table-hover table-striped">
-				<thead>
-					<tr>
-						<th class="text-center col-sm-1"><strong>#</th>
-						<th class="text-center col-sm-1"><strong>EAN</th>
-						<th class="text-center col-sm-2"><strong>Chargement</strong></th>
-						<th class="text-center col-sm-2"><strong>Reception</strong></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php
-					$nbLignes = 1;
-					foreach ($listes as $liste): ?>
-					<tr>
-							<td class="text-right"><strong><?php echo str_pad($nbLignes,3,"0",STR_PAD_LEFT); ?></strong></td>
-							<td class="text-right"><strong><?php echo $liste->ean; ?></strong></td>
-							<td class="text-right"><?php echo texte::short_french_date_time($liste->dateheure_exp); ?></td>
-							<?php if (!empty($liste->dateheure_rec)) {
-								echo "<td class='text-right'>".texte::short_french_date_time($liste->dateheure_rec)."</td>";
-							} else {
-								echo "<td class='text-center danger'><strong>Non receptionné</strong></td>";
-							} ?>
-					</tr>
-					<?php
-					$nbLignes ++;
-					endforeach ?>
-				</tbody>
-			</table>
+		<?php $tourn = "";   ?>
+		<div class="alert alert-warning"><h2>Tournée : <?= $stats[0]['numtournee'].$tourn ?></h2></div>
+		<?php
+				if ($stats[0]['nbrec'] != $stats[0]['nbexp']) {
+					$result = $stats[0]['nbexp'] - $stats[0]['nbrec'];
+					$msg = "<div class='bs-callout bs-callout-danger'>Il manque <strong>".$result."</strong> ";
+					if ($result >1) {
+						$msg .= "</strong> palettes</div>";
+					} else {
+						$msg .= "</strong> palette</div>";
+					}
+					echo $msg;
+				}
+		?>
+        <div class="col-md-12">
+		<table id="tabledbdetail" class="table table-hover table-striped">
+			<thead>
+				<tr>
+					<th class="text-center col-sm-1"><strong>#</strong></th>
+					<th class="text-center col-sm-1"><strong>EAN</strong></th>
+					<th class="text-center col-sm-2"><strong>Chargement</strong></th>
+					<th class="text-center col-sm-2"><strong>Reception</strong></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				$nbLignes = 1;
+				foreach ($listes as $liste): ?>
+				<tr>
+						<td class="text-right"><strong><?php echo str_pad($nbLignes,3,"0",STR_PAD_LEFT); ?></strong></td>
+						<td class="text-right"><strong><?php echo $liste->ean; ?></strong></td>
+						<td class="text-right"><?php echo texte::short_french_date_time($liste->dateheure_exp); ?></td>
+						<?php if (!empty($liste->dateheure_rec)) {
+							echo "<td class='text-right'>".texte::short_french_date_time($liste->dateheure_rec)."</td>";
+						} else {
+							echo "<td class='text-center danger'><strong><span class='glyphicon glyphicon-time'></span></strong></td>";
+						} ?>
+				</tr>
+				<?php
+				$nbLignes ++;
+				endforeach ?>
+			</tbody>
+		</table>
+    </div>
 	</div>
-</div>
 
     <script src="js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script src="js/dataTables.bootstrap.js" type="text/javascript"></script>
@@ -95,7 +93,7 @@ if (isset($_POST) && isset($_POST['tournee'])) {
 		"paging"		: true,
 		"lengthChange"	: false,
 		"processing"	: true,
-		"autoWidth"		: false
+		"autoWidth"		: true
 	})
 } );
 </script>

@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 /**
 * texte
 */
 class Texte{
-	
+
 	public static function limit($texte,$nbr){
 		return (strlen($texte) > $nbr ? substr(substr($texte,0,$nbr),0,strrpos(substr($texte,0,$nbr)," "))." ..." :$texte);
 	}
@@ -35,14 +35,22 @@ class Texte{
 	}
 
 	public static function extract_time($d){
-		$blocs = explode(' ',$d);
-		return $blocs[1];
+		if(!empty($d)){
+			$blocs = explode(' ',$d);
+			return $blocs[1];
+		} else {
+			return '';
+		}
 	}
 
 	public static function extract_date($d){
-		$blocs = explode(' ',$d);
-		$date = explode ('-',$blocs[0]);
-		return $date[2].'/'.$date[1].'/'.$date[0];
+		if (!empty($d)){
+			$blocs = explode(' ',$d);
+			$date = explode ('-',$blocs[0]);
+			return $date[2].'/'.$date[1].'/'.$date[0];
+		} else {
+			return '';
+		}
 	}
 
 	public static function generer($nbr){
@@ -66,7 +74,7 @@ class Texte{
 
 	public static function minLength($str, $length) {
 		return strlen($str) < $length ? 1 : 0;
-	}	
+	}
 
 	public static function maxLength($str, $length) {
 		return strlen($str) > $length ? 1 : 0;
