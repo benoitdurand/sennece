@@ -1,8 +1,4 @@
 <?php
-
-/**
-* texte
-*/
 class Texte{
 
 	public static function limit($texte,$nbr){
@@ -10,28 +6,38 @@ class Texte{
 	}
 
 	public static function french_date($d){
-		$mois =array('Jan','Fev','Mars','Avr','Mai','Juin','Juil','Aout','Sep','Oct','Nov','Dec');
-		$blocs = explode(' ',$d);
-		$date = explode ('-',$blocs[0]);
-		$french =$date[2].' '.$mois[$date[1]-1].' '.$date[0];
-		return $french;
+		if(!empty($d)){
+			$mois   = array('Jan','Fev','Mars','Avr','Mai','Juin','Juil','Aout','Sep','Oct','Nov','Dec');
+			$blocs  = explode(' ',$d);
+			$date   = explode('-',$blocs[0]);
+			$french = $date[2].' '.$mois[$date[1]-1].' '.$date[0];
+			return $french;
+		} else return '';
 	}
 
 	public static function french_date_time($d){
-		$mois =array('Jan','Fev','Mars','Avr','Mai','Juin','Juil','Aout','Sep','Oct','Nov','Dec');
-		$blocs = explode(' ',$d);
-		$date = explode ('-',$blocs[0]);
-		$time= explode(':',$blocs[1]);
-		$french =$date[2].' '.$mois[$date[1]-1].' '.$date[0].' à '.$time[0].':'.$time[1];
-		return $french;
+		if(!empty($d)){
+			$mois   = array('Jan','Fev','Mars','Avr','Mai','Juin','Juil','Aout','Sep','Oct','Nov','Dec');
+			$blocs  = explode(' ',$d);
+			$date   = explode('-',$blocs[0]);
+			$time   = explode(':',$blocs[1]);
+			$french = $date[2].' '.$mois[$date[1]-1].' '.$date[0].' à '.$time[0].':'.$time[1];
+			return $french;
+		} else {
+			return '';
+		}
 	}
 
 	public static function short_french_date_time($d){
-		$blocs = explode(' ',$d);
-		$date = explode ('-',$blocs[0]);
-		$time= explode(':',$blocs[1]);
-		$french =$date[2].'/'.$date[1].'/'.$date[0].' à '.$time[0].':'.$time[1];
-		return $french;
+		if(!empty($d)){
+			$blocs  = explode(' ',$d);
+			$date   = explode('-',$blocs[0]);
+			$time   = explode(':',$blocs[1]);
+			$french = $date[2].'/'.$date[1].'/'.$date[0].' à '.$time[0].':'.$time[1];
+			return $french;
+		} else {
+			return '';
+		}
 	}
 
 	public static function extract_time($d){
@@ -46,21 +52,11 @@ class Texte{
 	public static function extract_date($d){
 		if (!empty($d)){
 			$blocs = explode(' ',$d);
-			$date = explode ('-',$blocs[0]);
+			$date  = explode('-',$blocs[0]);
 			return $date[2].'/'.$date[1].'/'.$date[0];
 		} else {
 			return '';
 		}
-	}
-
-	public static function generer($nbr){
-		$string ='';
-		$chaine ="abcdefghijklmnopqrstuvwxyz0123456789@!-/*()ABCEFGHIJKLMNOPQRSTUVWXYZ";
-		//srand((double)microtime()*1000000);
-		for($i=0; $i<$nbr; $i++){
-			$string .=$chaine[rand()%strlen($chaine)];
-		}
-		return $string;
 	}
 
 	public static function cleantext($txt){
@@ -95,45 +91,6 @@ class Texte{
 		} else {
     		return false;
     	}
-	}
-
-
-	public static function paginateTable ($nbrPage, $currentPage, $pageName){
-		if ($nbrPage > 1) {
-					for($i=1;$i<=$nbrPage;$i++){
-						if($i == $currentPage){
-							echo "<li  class='active'><a href=''>$i</a></li>";
-						}else{
-							echo "<li><a href=$pageName&page=$i>$i</a></li>";
-						}
-					}
-				}
-	}
-
-	public static function calculatePage ($nb, $maxPerPage) {
-		$nbr_pages = ceil($nb/$maxPerPage);
-		return $nbr_pages;
-	}
-
-	public static function validatePage($value, $maxValue) {
-		if (is_numeric($value) && ($value <= $maxValue) && ($value > 0)) {
-			return $value;
-		}
-		else {
-			return 1;
-		}
-
-	}
-
-	public static function upperAfterPoint($str){
-		$phrases = explode(".", $str);
-		$strTmp = "";
-		foreach ($phrases as $phrase) {
-			if (trim($phrase) != "" ){
-				$strTmp .= " ".ucfirst(trim(mb_strtolower($phrase))).".";
-			}
-		}
-	return trim($strTmp);
 	}
 
 	public static function left($str, $length) {
