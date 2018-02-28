@@ -1,6 +1,6 @@
 <?php
 //base de données coaching
-define ("HOST" ,"127.0.0.1");
+define ("HOST" ,"localhost");
 define ("DBNAME" , "sennece_chargement");
 define ("USER","admin_sen_chgt");
 define ("PWD","hBsSN6DqpCsr8MuCg4TyWeb3");

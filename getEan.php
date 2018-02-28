@@ -9,8 +9,16 @@ if (isset($_POST) && isset($_POST['ean'])) {
 
 	$listes = $DB->query("SELECT `ean`, `id_tournee`, `numtournee`, `dateheure_exp`, `dateheure_rec` FROM `palette` JOIN `tournee` ON `tournee`.`id` = `id_tournee` WHERE `ean` LIKE '%".$ean."%'");
 	}
-include 'header.php';
 ?>
+<!doctype html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>Recherche</title>
+            <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+            <link rel="stylesheet" href="css/style.css">
+            <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
 
 <div class="container">
 	<div class="row">
@@ -49,6 +57,9 @@ include 'header.php';
 	</div>
 </div>
 
+    <script src="js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="js/dataTables.bootstrap.js" type="text/javascript"></script>
+
 <script>
 	$(document).ready(function() {
     $('#tabledbdetail').DataTable( {
@@ -74,7 +85,7 @@ include 'header.php';
             sortDescending: ": activer pour trier la colonne par ordre décroissant"
         }
     },
-		"order"			: [[ 4, "desc" ]],
+		"order"			: [[ 2, "desc" ]],
 		"searching"		: false,
 		"scrollCollapse": false,
 		"paging"		: true,

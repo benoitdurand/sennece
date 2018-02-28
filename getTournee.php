@@ -61,13 +61,16 @@ if (isset($_POST) && isset($_POST['tournee'])) {
 	</div>
 </div>
 
+    <script src="js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="js/dataTables.bootstrap.js" type="text/javascript"></script>
+
 <script>
 	$(document).ready(function() {
-    $('#tabledbdetail').DataTable( {
+    $('#tabledbdetail').DataTable({
     	language: {
         processing:     "Traitement en cours...",
         search:         "Rechercher&nbsp;:",
-        lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
+        lengthMenu:     "Afficher _MENU_ &eacute;l&eacute;ments",
         info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
         infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
         infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
@@ -86,7 +89,7 @@ if (isset($_POST) && isset($_POST['tournee'])) {
             sortDescending: ": activer pour trier la colonne par ordre décroissant"
         }
     },
-		"order"			: [[ 4, "desc" ]],
+		"order"			: [[ 2, "desc" ]],
 		"searching"		: true,
 		"scrollCollapse": false,
 		"paging"		: true,
