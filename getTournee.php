@@ -91,7 +91,7 @@ if (isset($_POST) && isset($_POST['tournee'])) {
 		"searching"		: true,
 		"scrollCollapse": false,
 		"paging"		: true,
-		"lengthChange"	: false,
+		"lengthChange"	: true,
 		"processing"	: true,
 		"autoWidth"		: true
 	})
