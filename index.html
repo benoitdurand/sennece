@@ -17,7 +17,6 @@
 <body>
 <nav class="navbar navbar-default" role="navigation">
   <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
@@ -28,26 +27,20 @@
       <a class="navbar-brand" href="#">WEBTransit 1.0</a>
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Menu  <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-              <li id="tourneeJ"><a href="#">Tournées du jour</a></li>
-              <li id="tourneeS"><a href="#">Tournées de la semaine</a></li>
-              <li id="tourneeA"><a href="#">Tournées / jour</a></li>
-          </ul>
-        </li>
+        <li id="tourneeJ"><a href="#">Tournées du jour</a></li>
+        <li id="tourneeS"><a href="#">Tournées de la semaine</a></li>
+        <li id="tourneeA"><a href="#">Tournées / jour</a></li>
       </ul>
       <form class="navbar-form navbar-left" role="search">
-              <div class="form-group">
-                  <input type="text" id = "ean" maxlength="20" class="form-control" placeholder="EAN">
-              </div>
-                <button type='button' class='btn btn-primary' id ="recherche" onclick="searchEAN()">  <span class="glyphicon glyphicon-search"></span> EAN</button>
+          <div class="form-group">
+            <input type="text" id = "ean" maxlength="20" class="form-control" placeholder="EAN">
+          </div>
+            <button type='button' class='btn btn-primary' id ="recherche" onclick="searchEAN()">  <span class="glyphicon glyphicon-search"></span> EAN</button>
       </form>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+    </div>
+  </div>
 </nav>
     <div id="data"></div>
 </body>
