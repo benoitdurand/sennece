@@ -56,7 +56,8 @@ if (!empty($_POST) & !empty($_POST['ean'])) {
 	     	<div id="erreurEan" style ='color:red'></div>
 	     	<!-- <button id="button" type="submit"><strong>Valider</strong></button> -->
 	     	<br>
-	     	<button type="button" onclick="location.href='index.php'"><strong>Fin chargement</strong></button>
+			<a href="index.php" class="click">Fin Chargement</a>
+	     	<!-- <button type="button" onclick="location.href='index.php'"><strong>Fin chargement</strong></button> -->
 	    </form>
 	    <?php
 			if ($_SESSION['numPalette'] > 1) {

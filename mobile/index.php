@@ -28,8 +28,8 @@
     </head>
     <body>
 		<h3>TRANSIT SENNECE</h3>
-		<button type="button" onclick="location.href='chargement.php'"><strong>Chargement</strong></button>
-		<button type="button" onclick="location.href='reception.php'"><strong>Reception</strong></button>
-		<button type="button" onclick="location.href='../../index.php'"><strong>Retour menu</strong></button>
+		<a href="chargement.php" class="click">Chargement</a>
+		<a href="reception.php" class="click">Reception</a>
+		<a href="../../index.php" class="click">retour Menu</a>
     </body>
 </html>

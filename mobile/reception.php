@@ -56,7 +56,8 @@ if (!empty($_POST) & !empty($_POST['ean'])) {
             <?php endif ?>
 
 	     	<!-- <button id="button" type="submit"><strong>Valider</strong></button> -->
-	     	<button type="button" onclick="location.href='index.php'"><strong>Fin reception</strong></button>
+	     	<a href="index.php" class="click">Fin reception</a>
+	     	<!-- <button type="button" onclick="location.href='index.php'"><strong>Fin reception</strong></button> -->
 	    </form>
 
 	    <?php
