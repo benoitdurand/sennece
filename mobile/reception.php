@@ -50,7 +50,7 @@ if (!empty($_POST) & !empty($_POST['ean'])) {
     <body OnLoad="document.reception.ean.focus()">
 		<form method="POST" action="reception.php" name="reception">
 			<h4>reception</h4>
-	     	<input type="text" name="ean" id="ean" class="input-support" maxlength="20"></br>
+	     	<input type="text" name="ean" id="ean" class="input-support" maxlength="20" ></br>
 	     	<?php if (isset($erreur)) : ?>
                 <div id="error"><strong><?= $erreur; ?></strong></div>
             <?php endif ?>

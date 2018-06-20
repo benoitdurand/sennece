@@ -5,23 +5,29 @@ if (!empty($_POST) & !empty($_POST['ean'])) {
 	$table     = T_PALETTE;
 	$DB->table = $table;
 	$ean       = $_POST['ean'];
-	// $now     = strftime("%F %T");
-	$_SESSION['numPalette']++;
 
 	// Si ean et numero de tournée existent déjà, mettre à jour la ligne
-	$listes = $DB->tquery("SELECT id FROM ".$table." WHERE ean='{$ean}' AND id_tournee='{$_SESSION['numTournee']}' AND receive=0");
+	$listes = $DB->tquery("SELECT id FROM {$table} WHERE ean = '{$ean}' AND id_tournee = '{$_SESSION['numTournee']}' AND receive = 0");
 	// ean & numTournée déja existants -> mettre à jour code client et la date
 	if (!empty($listes)) {
 		$id  = $listes[0]['id'];
 		$now = strftime("%F %T");
 		$nb  = $DB->updateDB(array('dateheure_exp'=>$now), $id);
 	} else {
-		// Si ean, numéro de tournéee et code magasin existent on ne fait rien sinon nouvel enregistrement.
-		$listes = $DB->tquery("SELECT id FROM {$table} WHERE ean='{$ean}' AND id_tournee='{$_SESSION['numTournee']}' AND receive=0");
-		// Non existant -> Enregistrement
+		// Est-ce que la palette a déjà été scannée mais avec une autre tournée ?
+		// Si c'est le cas il ne faut rien faire.
+		$listes = $DB->tquery("SELECT id FROM {$table} WHERE ean = '{$ean}' AND id_tournee <> '{$_SESSION['numTournee']}' AND receive = 0")
+		// Si la palette n'a pas été scanée il faut continuer.
 		if (empty($listes)){
-			$data    = array('ean'=>$ean, 'receive'=>0, 'id_tournee'=>$_SESSION['numTournee']);
-			$nb      = $DB->insertIntoDB($data);
+			// Si ean, numéro de tournéee et code magasin existent on ne fait rien sinon nouvel enregistrement.
+			$listes = $DB->tquery("SELECT id FROM {$table} WHERE ean='{$ean}' AND id_tournee='{$_SESSION['numTournee']}' AND receive = 0");
+			// Non existant -> Enregistrement
+			if (empty($listes)){
+				$data    = array('ean'=>$ean, 'receive'=>0, 'id_tournee'=>$_SESSION['numTournee']);
+				$nb      = $DB->insertIntoDB($data);
+				$_SESSION['numPalette']++;
+			}
+
 		}
 	}
 } else {
@@ -70,7 +76,6 @@ if (!empty($_POST) & !empty($_POST['ean'])) {
     </body>
 
 <script>
-
 	function validateEAN(){
 		var ean = document.getElementById("ean").value;
 		if (ean.length < 8) {
@@ -81,8 +86,6 @@ if (!empty($_POST) & !empty($_POST['ean'])) {
 		} else {
 			return true;
 		}
-
 	}
-}
 </script>
 </html>
