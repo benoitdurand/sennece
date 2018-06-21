@@ -29,6 +29,7 @@
     <body>
 		<h3>TRANSIT SENNECE</h3>
 		<a href="chargement.php" class="click">Chargement</a>
+        <a href="select_tournee.php" class="click">Reprendre tournée</a>
 		<a href="reception.php" class="click">Reception</a>
 		<a href="../../index.php" class="click">retour Menu</a>
     </body>

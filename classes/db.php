@@ -159,5 +159,19 @@ class Db {
 		return $cpt;
 	}
 
+    public function getTourneeID(){
+        $sql = "SELECT `id`,  CONCAT(`numtournee`, ' - ', TIME(`dateheure_start`)) AS libelle FROM `tournee` WHERE DATE(`dateheure_start`) = DATE(NOW()) ORDER BY TIME(`dateheure_start`) DESC LIMIT 4";
+        $req = $this->connexion->prepare($sql);
+        $req->execute();
+        return $req->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function getTournee($id){
+        $sql = "SELECT `numtournee` FROM `tournee` WHERE id = ".intval($id);
+        $req = $this->connexion->prepare($sql);
+        $req->execute();
+        return $req->fetchColumn();
+    }
+
 	
 }

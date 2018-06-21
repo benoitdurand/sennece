@@ -37,7 +37,7 @@ $listes = $DB->query("SELECT count(distinct id_tournee) as tournee, date(dateheu
 						<td class="text-right col-md-1"><?php echo $liste->tournee; ?></td>
 						<td class="text-right col-md-1"><?php echo $liste->totalEan; ?></td>
 						<td class="text-right col-md-1"><?php echo $liste->recept; ?></td>
-						<td class='text-center col-md-1'><a href='export_tournee_csv.php?date=<?php echo $liste->jour; ?>' type='button' class='btn btn-success btn-sm'><span class='glyphicon glyphicon-export'></span></a></td>
+						<td class='text-center col-md-1'><a href='export_journee_csv.php?date=<?php echo $liste->jour; ?>' type='button' class='btn btn-success btn-sm'><span class='glyphicon glyphicon-export'></span></a></td>
 					</tr>
 				<?php endforeach ?>
 			</tbody>

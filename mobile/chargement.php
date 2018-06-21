@@ -1,5 +1,6 @@
 <?php
 include '../includes.php';
+$errorMessage = "";
 
 if (!empty($_POST) & !empty($_POST['ean'])) {
 	$table     = T_PALETTE;
@@ -13,10 +14,11 @@ if (!empty($_POST) & !empty($_POST['ean'])) {
 		$id  = $listes[0]['id'];
 		$now = strftime("%F %T");
 		$nb  = $DB->updateDB(array('dateheure_exp'=>$now), $id);
+        $errorMessage = "Palette déjà scannée...";
 	} else {
 		// Est-ce que la palette a déjà été scannée mais avec une autre tournée ?
 		// Si c'est le cas il ne faut rien faire.
-		$listes = $DB->tquery("SELECT id FROM {$table} WHERE ean = '{$ean}' AND id_tournee <> '{$_SESSION['numTournee']}' AND receive = 0")
+		$listes = $DB->tquery("SELECT id FROM {$table} WHERE ean = '{$ean}' AND id_tournee <> '{$_SESSION['numTournee']}' AND receive = 0");
 		// Si la palette n'a pas été scanée il faut continuer.
 		if (empty($listes)){
 			// Si ean, numéro de tournéee et code magasin existent on ne fait rien sinon nouvel enregistrement.
@@ -27,22 +29,35 @@ if (!empty($_POST) & !empty($_POST['ean'])) {
 				$nb      = $DB->insertIntoDB($data);
 				$_SESSION['numPalette']++;
 			}
-
-		}
+		} else {
+            $errorMessage = "Palette déjà scannée...";
+        }
 	}
 } else {
-	$jour     = date('w');
-	$compteur = $DB->getAndUpdateCompteur();
-	// Calcul du n° de tournée
-	// Afficher la date sous forme AAMMJJ
-	$tournee  = str_pad($compteur,5,"0",STR_PAD_LEFT)."-".date('ymd', strtotime('now'));
+    if (!empty($_GET['value'])){
+        $tourneeID  = intval($_GET['value']);
+        $tournee = $DB->getTournee($tourneeID);
+        if (!empty($tournee)){
+            $_SESSION['tournee']    = $tournee;
+            $_SESSION['numTournee'] = $tourneeID;
+            $_SESSION['numPalette'] = 0;
+        } else {
+            header("location:index.php");
+        }
 
-	$_SESSION['tournee']    = $tournee;
-	$table                  = T_TOURNEE;
-	$DB->table              = $table;
-	$numTournee             = $DB->insertIntoDB(array('numtournee'=>$tournee));
-	$_SESSION['numTournee'] = $numTournee;
-	$_SESSION['numPalette'] = 0;
+    } else {
+        $jour     = date('w');
+        $compteur = $DB->getAndUpdateCompteur();
+        // Calcul du n° de tournée
+        // Afficher la date sous forme AAMMJJ
+        $tournee  = str_pad($compteur,5,"0",STR_PAD_LEFT)."-".date('ymd', strtotime('now'));
+        $_SESSION['tournee']    = $tournee;
+        $table                  = T_TOURNEE;
+        $DB->table              = $table;
+        $numTournee             = $DB->insertIntoDB(array('numtournee'=>$tournee));
+        $_SESSION['numTournee'] = $numTournee;
+        $_SESSION['numPalette'] = 0;
+    }
 }
 ?>
 
@@ -59,7 +74,10 @@ if (!empty($_POST) & !empty($_POST['ean'])) {
 	    <form method="POST" action="chargement.php" name="chargement" onsubmit="return validateEAN()">
 
 	     	<input type="text" name="ean" id="ean" class="input-support" maxlength="20"></br>
-	     	<div id="erreurEan" style ='color:red'></div>
+	     	<?php if (!empty($errorMessage)) : ?>
+                <div id="error"><strong><?= $errorMessage; ?></strong></div>
+                <embed id = "son" src="file://\Application\alert.wav" autostart=false width=0 height=0 name="sound1" enablejavascript="true">
+            <?php endif ?>
 	     	<!-- <button id="button" type="submit"><strong>Valider</strong></button> -->
 	     	<br>
 			<a href="index.php" class="click">Fin Chargement</a>
