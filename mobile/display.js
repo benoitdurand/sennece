@@ -40,31 +40,44 @@ function creerBouton(debut) {
   }
 
   var x ;
-  for (x=debut ; x<=debut+(nbItemPerPage-1) ; x++) {
-    if (x < tableau.length) {
-      var btn   = document.createElement("input" ) ;
+  if (tableau.length == 0){
+    var btn   = document.createElement("input" ) ;
       btn.type  = "button" ;
-      btn.value = tableau[x].libelle;
-      btn.id    = tableau[x].id;
+      btn.value = "<< Aucune tournée en cours - RETOUR";
+      btn.id    = 0;
       btn.style.width = '100%';
       btn.style.marginBottom = '10px';
       btn.style.height = '40px';
       btn.style.fontSize = '16px';
-      btn.onclick = function() {location.href=url+this.id ;}
+      btn.onclick = function() {location.href='index.php' ;}
       document.getElementById("choix").appendChild(btn);
-    }
-  }
+  } else {
+      for (x=debut ; x<=debut+(nbItemPerPage-1) ; x++) {
+        if (x < tableau.length) {
+          var btn   = document.createElement("input" ) ;
+          btn.type  = "button" ;
+          btn.value = tableau[x].libelle;
+          btn.id    = tableau[x].id;
+          btn.style.width = '100%';
+          btn.style.marginBottom = '10px';
+          btn.style.height = '40px';
+          btn.style.fontSize = '16px';
+          btn.onclick = function() {location.href=url+this.id ;}
+          document.getElementById("choix").appendChild(btn);
+        }
+      }
 
-  if (tableau.length > nbItemPerPage) {
-    debut = (x >= tableau.length)? 0 : x;
-    var btn = document.createElement("input" ) ;
-        btn.type = "button" ;
-        btn.value = "PAGE SUIVANTE >>" ;
-        btn.style.width = '100%';
-        btn.style.marginBottom = '10px';
-        btn.style.height = '40px';
+      if (tableau.length > nbItemPerPage) {
+        debut = (x >= tableau.length)? 0 : x;
+        var btn = document.createElement("input" ) ;
+            btn.type = "button" ;
+            btn.value = "PAGE SUIVANTE >>" ;
+            btn.style.width = '100%';
+            btn.style.marginBottom = '10px';
+            btn.style.height = '40px';
 
-        btn.onclick = function() {creerBouton(debut)}
-        document.getElementById("choix").appendChild(btn) ;
+            btn.onclick = function() {creerBouton(debut)}
+            document.getElementById("choix").appendChild(btn) ;
+      }
   }
 }

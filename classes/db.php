@@ -1,4 +1,4 @@
-<?php 
+<?php
 class Db {
 
 	private $host = HOST;
@@ -71,7 +71,7 @@ class Db {
 		$table = $this->table;
 		$req = $this->connexion->prepare("SELECT * FROM {$table}");
 		$req->execute();
-		return $req->rowCount();		
+		return $req->rowCount();
 	}
 
 	// Insere un enregistrement dans la table. Le contenu des champs se trouve dans la variable $data.
@@ -123,8 +123,6 @@ class Db {
 		return $req->fetchAll(PDO::FETCH_OBJ);
 	}
 
-
-
 	public function query($sql,$data=array()){
 		$req = $this->connexion->prepare($sql);
 		$req->execute($data);
@@ -173,5 +171,5 @@ class Db {
         return $req->fetchColumn();
     }
 
-	
+
 }
