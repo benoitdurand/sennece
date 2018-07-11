@@ -158,7 +158,9 @@ class Db {
 	}
 
     public function getTourneeID(){
-        $sql = "SELECT `id`,  CONCAT(`numtournee`, ' - ', TIME(`dateheure_start`)) AS libelle FROM `tournee` WHERE DATE(`dateheure_start`) = DATE(NOW()) ORDER BY TIME(`dateheure_start`) DESC LIMIT 4";
+        $sql = "SELECT `id` AS id,  CONCAT(`numtournee`, ' - ', TIME(`dateheure_start`)) AS libelle FROM `tournee`
+        		WHERE DATE(`dateheure_start`) = DATE(NOW()) AND `start_chargement` = 1 AND `start_receipt` = 0
+        		ORDER BY TIME(`dateheure_start`) DESC LIMIT 4";
         $req = $this->connexion->prepare($sql);
         $req->execute();
         return $req->fetchAll(PDO::FETCH_OBJ);

@@ -18,17 +18,13 @@ if (!empty($_POST) & !empty($_POST['ean'])) {
 	} else {
 		// Est-ce que la palette a déjà été scannée mais avec une autre tournée ?
 		// Si c'est le cas il ne faut rien faire.
-		$listes = $DB->tquery("SELECT id FROM {$table} WHERE ean = '{$ean}' AND id_tournee <> '{$_SESSION['numTournee']}' AND receive = 0");
+		$listes = $DB->tquery("SELECT id FROM {$table} WHERE ean = '{$ean}' AND id_tournee <> '{$_SESSION['numTournee']}'");
 		// Si la palette n'a pas été scanée il faut continuer.
 		if (empty($listes)){
-			// Si ean, numéro de tournéee et code magasin existent on ne fait rien sinon nouvel enregistrement.
-			$listes = $DB->tquery("SELECT id FROM {$table} WHERE ean='{$ean}' AND id_tournee='{$_SESSION['numTournee']}' AND receive = 0");
-			// Non existant -> Enregistrement
-			if (empty($listes)){
 				$data    = array('ean'=>$ean, 'receive'=>0, 'id_tournee'=>$_SESSION['numTournee']);
 				$nb      = $DB->insertIntoDB($data);
+				$DB->insert("UPDATE tournee SET start_chargement = 1 WHERE id = '{$_SESSION['numTournee']}' AND start_chargement = 0");
 				$_SESSION['numPalette']++;
-			}
 		} else {
             $errorMessage = "Palette déjà scannée...";
         }

@@ -11,7 +11,8 @@ if (!empty($_POST) & !empty($_POST['ean'])) {
 	$ean       = $_POST['ean'];
 
 	// Recherche du n° de tournée à partir de l'ean scanné.
-	$tournees = $DB->tquery("SELECT t1.id, t1.id_tournee, t2.numtournee FROM ".$table." AS t1 JOIN ".T_TOURNEE." AS t2 ON t1.id_tournee = t2.id WHERE ean='{$ean}' AND receive=0");
+	$tournees = $DB->tquery("SELECT `t1`.`id`, `t1`.`id_tournee`, `t2`.`numtournee`
+		FROM ".$table." AS t1 JOIN ".T_TOURNEE." AS t2 ON `t1`.`id_tournee` = `t2`.`id` WHERE `ean` = '{$ean}' AND `receive` = 0");
 	if (!empty($tournees)) {
 		// Palette trouvée -> Mettre à jour.
 		$numTournee = $tournees[0]['numtournee'];
@@ -26,8 +27,13 @@ if (!empty($_POST) & !empty($_POST['ean'])) {
 		$now        = strftime("%F %T");
 
 		// Nombre de palettes restant à receptionner.
-		$nb         = $DB->insert("UPDATE {$table} SET receive=1, dateheure_rec='{$now}' WHERE ean='{$ean}' AND receive=0");
-		$aFaire     = $DB->tquery("SELECT COUNT(*) as total FROM {$table} WHERE id_tournee={$idTournee} AND receive=0");
+		$DB->insert("UPDATE {$table} SET receive = 1, dateheure_rec = '{$now}' WHERE ean = '{$ean}' AND receive = 0");
+		// $sql="UPDATE tournee SET start_receipt = 1 WHERE numtournee = {$idTournee} AND start_receipt = 0";
+		// var_dump($sql);
+		// die();
+		$DB->insert("UPDATE tournee SET start_receipt = 1 WHERE id = '{$idTournee}' AND start_receipt = 0");
+
+		$aFaire     = $DB->tquery("SELECT COUNT(*) as total FROM {$table} WHERE id_tournee = {$idTournee} AND receive = 0");
 		$nbPalettes = $palettes[0]['total'];
 		$restant    = $aFaire[0]['total'];
 	} else {
